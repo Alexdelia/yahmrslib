@@ -1,3 +1,6 @@
+mod gen;
+pub use gen::*;
+
 pub const RESET: &str = "\x1b[0m";
 
 pub const CLEAR: &str = "\033[H\033[2J";
@@ -7,18 +10,18 @@ pub const DIM: &str = "\x1b[2m";
 pub const ITALIC: &str = "\x1b[3m";
 pub const UNDERLINE: &str = "\x1b[4m";
 pub const BLINK: &str = "\x1b[5m";
-pub const FAST_BLINK: &str = "\x1b[6m";	// not widely supported
+pub const FAST_BLINK: &str = "\x1b[6m"; // not widely supported
 pub const REVERSE: &str = "\x1b[7m";
-pub const HIDDEN: &str = "\x1b[8m";	// not widely supported
+pub const HIDDEN: &str = "\x1b[8m"; // not widely supported
 pub const CROSS: &str = "\x1b[9m";
 
-pub const DOUBLE_UNDERLINE: &str = "\x1b[21m";	// can instead disable BOLD
+pub const DOUBLE_UNDERLINE: &str = "\x1b[21m"; // can instead disable BOLD
 
 pub const NO_ITALIC: &str = "\x1b[23m";
 pub const NO_UNDERLINE: &str = "\x1b[24m";
 pub const NO_BLINK: &str = "\x1b[25m";
 pub const NO_REVERSE: &str = "\x1b[27m";
-pub const NO_HIDDEN: &str = "\x1b[28m";	// not widely supported
+pub const NO_HIDDEN: &str = "\x1b[28m"; // not widely supported
 pub const NO_CROSS: &str = "\x1b[29m";
 
 pub const NO_COLOR: &str = "\x1b[39m";
@@ -70,42 +73,44 @@ pub const BG_BRIGHT_MAGENTA: &str = "\x1b[105m";
 pub const BG_BRIGHT_CYAN: &str = "\x1b[106m";
 pub const BG_BRIGHT_WHITE: &str = "\x1b[107m";
 
-mod abbrev {
-	pub const D = RESET;	// D for default
+pub mod abbrev {
+    use super::*;
 
-	pub const C = CLEAR;
+    pub const D: &str = RESET; // D for default
 
-	pub const B = BOLD;
-	pub const F = DIM;	// F for faint
-	pub const I = ITALIC;
-	pub const U = UNDERLINE;
-	pub const BL = BLINK;
-	// pub const FB = FAST_BLINK;	// not widely supported
-	pub const R = REVERSE;
-	// pub const H = HIDDEN;	// not widely supported
-	pub const X = CROSS;
+    pub const C: &str = CLEAR;
 
-	pub const N_I = NO_ITALIC;
-	pub const N_U = NO_UNDERLINE;
-	pub const N_BL = NO_BLINK;
-	pub const N_R = NO_REVERSE;
-	// pub const N_H = NO_HIDDEN;	// not widely supported
-	pub const N_X = NO_CROSS;
+    pub const B: &str = BOLD;
+    pub const F: &str = DIM; // F for faint
+    pub const I: &str = ITALIC;
+    pub const U: &str = UNDERLINE;
+    pub const BL: &str = BLINK;
+    // pub const FB: &str = FAST_BLINK;	// not widely supported
+    pub const RV: &str = REVERSE;
+    // pub const H: &str = HIDDEN;	// not widely supported
+    pub const X: &str = CROSS;
 
-	pub const N_C = NO_COLOR;
+    pub const N_I: &str = NO_ITALIC;
+    pub const N_U: &str = NO_UNDERLINE;
+    pub const N_BL: &str = NO_BLINK;
+    pub const N_R: &str = NO_REVERSE;
+    // pub const N_H: &str = NO_HIDDEN;	// not widely supported
+    pub const N_X: &str = NO_CROSS;
 
-	pub const BLA = BLACK;
-	//
-	//
-	pub const R = RED;
-	pub const GRE = GREEN;
-	pub const G = GREEN;
-	pub const YEL = YELLOW;
-	pub const Y = YELLOW;
-	pub const BLU = BLUE;
-	//
-	pub const MAG = MAGENTA;
-	pub const M = MAGENTA;
-	pub const CYA = CYAN;
-	//
+    pub const N_C: &str = NO_COLOR;
+
+    pub const BLA: &str = BLACK;
+    //
+    //
+    pub const R: &str = RED;
+    pub const GRE: &str = GREEN;
+    pub const G: &str = GREEN;
+    pub const YEL: &str = YELLOW;
+    pub const Y: &str = YELLOW;
+    pub const BLU: &str = BLUE;
+    //
+    pub const MAG: &str = MAGENTA;
+    pub const M: &str = MAGENTA;
+    pub const CYA: &str = CYAN;
+    //
 }
