@@ -1,8 +1,9 @@
-use std::fmt::format;
-
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::parse::{Parse, Parser};
+use syn::{
+    parse::{Parse, Parser},
+    token::Token,
+};
 
 struct RGBInput {
     r: u8,
@@ -12,24 +13,49 @@ struct RGBInput {
 
 impl syn::parse::Parse for RGBInput {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
-        let r = input.parse::<syn::LitInt>()?.base10_parse::<u8>()?;
-        input.parse::<syn::Token![,]>()?;
-        let g = input.parse::<syn::LitInt>()?.base10_parse::<u8>()?;
-        input.parse::<syn::Token![,]>()?;
-        let b = input.parse::<syn::LitInt>()?.base10_parse::<u8>()?;
+        fn parse_u8(input: syn::parse::ParseStream, comma: bool) -> syn::Result<u8> {
+            let Ok(lit) = input.parse::<syn::LitInt>() else {
+				return Err(syn::Error::new_spanned(input.to_string(), "expected integer literal"));
+			};
+            let Ok(val) = lit.base10_parse::<u8>() else {
+				return Err(syn::Error::new_spanned(lit, "expected u8 literal (0..=255)"));
+			};
+
+            if comma {
+                if input.parse::<syn::Token![,]>().is_err() {
+                    return Err(syn::Error::new_spanned(
+                        input.to_string(),
+                        "expected 3 comma-separated integers",
+                    ));
+                }
+            }
+
+            Ok(val)
+        }
+        let r = parse_u8(input, true)?;
+        let g = parse_u8(input, true)?;
+        let b = parse_u8(input, false)?;
         Ok(RGBInput { r, g, b })
     }
 }
 
 #[proc_macro]
 pub fn rgb(input: TokenStream) -> TokenStream {
-    let RGBInput { r, g, b } = RGBInput::parse.parse(input).unwrap();
+    let RGBInput { r, g, b } = match RGBInput::parse.parse(input) {
+        Ok(rgb) => rgb,
+        Err(e) => return e.to_compile_error().into(),
+    };
+
     quote!({ format!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
 }
 
 #[proc_macro]
 pub fn rgb_bg(input: TokenStream) -> TokenStream {
-    let RGBInput { r, g, b } = RGBInput::parse.parse(input).unwrap();
+    let RGBInput { r, g, b } = match RGBInput::parse.parse(input) {
+        Ok(rgb) => rgb,
+        Err(e) => return e.to_compile_error().into(),
+    };
+
     quote!({ format!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
 }
 
@@ -53,43 +79,81 @@ pub fn c8bit_bg(input: TokenStream) -> TokenStream {
     quote!({ format!("\x1b[48;5;{}m", #n) }).into()
 }
 
-#[proc_macro]
-pub fn hex(input: TokenStream) -> TokenStream {
-    // parse hex of format: "#FF00FF" or "FF00FF" or "ff00ff" or #FF00FF or #ff00ff or ff00ff
-    // get TokenStream as raw string
-    let mut s = input.to_string().to_lowercase();
-    s.retain(|c| !c.is_whitespace() || c == '#' || c == '"' || c == '\'');
-    if s.starts_with("0x") {
-        s = s[2..].to_string();
-    }
+struct HexInput {
+    r: u8,
+    g: u8,
+    b: u8,
+}
 
-    if s.len() != 6 || !s.chars().all(|c| c.is_ascii_hexdigit()) {
-        let mut e = format!("expected hex color (e.g. #ff00ff), got {s}");
-        if s.len() != 6 {
-            e.push_str(format!("\ngot {} chars, expected 6", s.len()).as_str());
+impl HexInput {
+    fn parse(input: TokenStream) -> syn::Result<Self> {
+        let mut s = input.to_string().to_lowercase();
+        s.retain(|c| !c.is_whitespace() && c != '#' && c != '"' && c != '\'');
+        if s.starts_with("0x") {
+            s = s[2..].to_string();
         }
-        if !s.chars().all(|c| c.is_ascii_hexdigit()) {
-            let mut bits = String::new();
 
-            for c in s.chars() {
-                if !c.is_ascii_hexdigit() {
-                    bits.push(c);
-                } else {
-                    bits.push_str("_");
+        if s.len() != 6 || !s.chars().all(|c| c.is_ascii_hexdigit()) {
+            let mut e = format!(
+            	"expected hex color (e.g. \x1b[32m#ff00ff\x1b[39m), got \x1b[31m{input}\x1b[39m -> \x1b[31;3m{s}\x1b[39;23m"
+        	);
+            if s.len() != 6 {
+                e.push_str(
+                    format!(
+                        "\nexpected \x1b[32m6\x1b[39m chars, got \x1b[31m{}\x1b[39m",
+                        s.len()
+                    )
+                    .as_str(),
+                );
+            }
+            if !s.chars().all(|c| c.is_ascii_hexdigit()) {
+                let mut cs = String::new();
+                let mut bits = String::new();
+
+                for c in s.chars() {
+                    if !c.is_ascii_hexdigit() {
+                        cs.push_str(format!("\x1b[31m{c}\x1b[39m").as_str());
+                        bits.push_str(format!("\x1b[31m^\x1b[39m").as_str());
+                    } else {
+                        cs.push_str(format!("\x1b[32m{c}\x1b[39m").as_str());
+                        bits.push(' ');
+                    }
                 }
+
+                e.push_str(
+                    format!("\n{cs}\n{bits} -> are \x1b[33mnot hex\x1b[39m digits").as_str(),
+                );
             }
 
-            e.push_str(format!("\n{bits} are not hex digits").as_str());
+            return Err(syn::Error::new_spanned(input.to_string(), e));
         }
 
-        return syn::Error::new(syn::spanned::Spanned::span(&input.to_string()), e)
-            .to_compile_error()
-            .into();
+        let r = u8::from_str_radix(&s[0..2], 16).unwrap();
+        let g = u8::from_str_radix(&s[2..4], 16).unwrap();
+        let b = u8::from_str_radix(&s[4..6], 16).unwrap();
+
+        Ok(HexInput { r, g, b })
     }
+}
 
-    quote!(#s).into()
+#[proc_macro]
+pub fn hex(input: TokenStream) -> TokenStream {
+    let HexInput { r, g, b } = match HexInput::parse(input) {
+        Ok(hex) => hex,
+        Err(e) => return e.to_compile_error().into(),
+    };
 
-    // quote!({ format!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
+    quote!({ format!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
+}
+
+#[proc_macro]
+pub fn hex_bg(input: TokenStream) -> TokenStream {
+    let HexInput { r, g, b } = match HexInput::parse(input) {
+        Ok(hex) => hex,
+        Err(e) => return e.to_compile_error().into(),
+    };
+
+    quote!({ format!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
 }
 
 #[cfg(test)]
@@ -118,5 +182,24 @@ mod tests {
     fn test_c8bit_bg() {
         let s = c8bit_bg(quote! { 42 }.into()).to_string();
         assert_eq!(s, "\"\x1b[48;5;42m\"");
+    }
+
+    #[test]
+    fn test_hex() {
+        for s in vec!["#FF00FF", "#ff00ff", "FF00FF", "ff00ff"] {
+            let s = hex(quote! { #s }.into()).to_string();
+            assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
+        }
+
+        let s = hex(quote! { FF00FF }.into()).to_string();
+        assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
+
+        let s = hex(quote! { ff00ff }.into()).to_string();
+        assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
+
+        for s in vec![0xFF00FF, 0xff00ff] {
+            let s = hex(quote! { #s }.into()).to_string();
+            assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
+        }
     }
 }
