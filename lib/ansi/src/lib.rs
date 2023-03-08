@@ -1,4 +1,5 @@
-pub use gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
+pub use ::const_format::formatcp as __formatcp;
+pub use gen::{c8bit, c8bit_bg, custom, hex, hex_bg, rgb, rgb_bg};
 
 pub const RESET: &str = "\x1b[0m";
 

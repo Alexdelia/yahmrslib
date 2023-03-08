@@ -1,4 +1,7 @@
-use ansi::{hex, rgb, rgb_bg};
+use ansi::{custom, hex, rgb, rgb_bg};
+
+const SOME: &str = rgb!(0, 0, 0);
+const SOME2: &str = custom!(ansi::ITALIC, ansi::BOLD);
 
 fn main() {
     println!("{}Hello, world!{}", rgb!(42, 255, 200), ansi::RESET);
@@ -7,6 +10,8 @@ fn main() {
     dbg!(hex!("ff00ff"));
     dbg!(hex!(0xff00ff));
     dbg!(hex!(#ff00ff));
+    println!("{}Hello, world!{}", SOME, ansi::RESET);
+    dbg!(SOME2);
     // hex!(0xFF00FF, some);
     // hex!(#ff00f);
     // rgb!("hey", 0, 0);

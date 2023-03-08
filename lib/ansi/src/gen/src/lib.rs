@@ -2,6 +2,12 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, Parser};
 
+#[proc_macro]
+pub fn custom(input: TokenStream) -> TokenStream {
+    let s = input.to_string();
+    quote!({ #s }).into()
+}
+
 struct RGBInput {
     r: u8,
     g: u8,
@@ -41,7 +47,7 @@ pub fn rgb(input: TokenStream) -> TokenStream {
         Err(e) => return e.to_compile_error().into(),
     };
 
-    quote!({ format!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
+    quote!({ ansi::__formatcp!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
 }
 
 #[proc_macro]
@@ -51,7 +57,7 @@ pub fn rgb_bg(input: TokenStream) -> TokenStream {
         Err(e) => return e.to_compile_error().into(),
     };
 
-    quote!({ format!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
+    quote!({ ansi::__formatcp!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
 }
 
 #[proc_macro]
@@ -61,7 +67,7 @@ pub fn c8bit(input: TokenStream) -> TokenStream {
         .unwrap()
         .base10_parse::<u8>()
         .unwrap();
-    quote!({ format!("\x1b[38;5;{}m", #n) }).into()
+    quote!({ ansi::__format!("\x1b[38;5;{}m", #n) }).into()
 }
 
 #[proc_macro]
@@ -71,7 +77,7 @@ pub fn c8bit_bg(input: TokenStream) -> TokenStream {
         .unwrap()
         .base10_parse::<u8>()
         .unwrap();
-    quote!({ format!("\x1b[48;5;{}m", #n) }).into()
+    quote!({ ansi::__format!("\x1b[48;5;{}m", #n) }).into()
 }
 
 struct HexInput {
@@ -138,7 +144,7 @@ pub fn hex(input: TokenStream) -> TokenStream {
         Err(e) => return e.to_compile_error().into(),
     };
 
-    quote!({ format!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
+    quote!({ ansi::__formatcp!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
 }
 
 #[proc_macro]
@@ -148,5 +154,5 @@ pub fn hex_bg(input: TokenStream) -> TokenStream {
         Err(e) => return e.to_compile_error().into(),
     };
 
-    quote!({ format!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
+    quote!({ ansi::__formatcp!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
 }

@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 gen = { path = "src/gen" }
+const_format = "0.2.30"
