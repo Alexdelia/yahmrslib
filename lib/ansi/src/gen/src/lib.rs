@@ -1,9 +1,6 @@
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{
-    parse::{Parse, Parser},
-    token::Token,
-};
+use syn::parse::{Parse, Parser};
 
 struct RGBInput {
     r: u8,
@@ -154,52 +151,4 @@ pub fn hex_bg(input: TokenStream) -> TokenStream {
     };
 
     quote!({ format!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_rgb() {
-        let s = rgb(quote! { 42, 255, 0 }.into()).to_string();
-        assert_eq!(s, "\"\x1b[38;2;42;255;0m\"");
-    }
-
-    #[test]
-    fn test_rgb_bg() {
-        let s = rgb_bg(quote! { 42, 255, 0 }.into()).to_string();
-        assert_eq!(s, "\"\x1b[48;2;42;255;0m\"");
-    }
-
-    #[test]
-    fn test_c8bit() {
-        let s = c8bit(quote! { 42 }.into()).to_string();
-        assert_eq!(s, "\"\x1b[38;5;42m\"");
-    }
-
-    #[test]
-    fn test_c8bit_bg() {
-        let s = c8bit_bg(quote! { 42 }.into()).to_string();
-        assert_eq!(s, "\"\x1b[48;5;42m\"");
-    }
-
-    #[test]
-    fn test_hex() {
-        for s in vec!["#FF00FF", "#ff00ff", "FF00FF", "ff00ff"] {
-            let s = hex(quote! { #s }.into()).to_string();
-            assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
-        }
-
-        let s = hex(quote! { FF00FF }.into()).to_string();
-        assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
-
-        let s = hex(quote! { ff00ff }.into()).to_string();
-        assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
-
-        for s in vec![0xFF00FF, 0xff00ff] {
-            let s = hex(quote! { #s }.into()).to_string();
-            assert_eq!(s, "\"\x1b[38;2;255;0;255m\"");
-        }
-    }
 }

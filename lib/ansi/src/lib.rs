@@ -1,4 +1,4 @@
-pub use gen::{c8bit, c8bit_bg, hex, rgb, rgb_bg};
+pub use gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
 
 pub const RESET: &str = "\x1b[0m";
 
