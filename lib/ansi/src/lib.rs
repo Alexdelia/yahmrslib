@@ -2,7 +2,7 @@ pub use gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
 
 pub const RESET: &str = "\x1b[0m";
 
-pub const CLEAR: &str = "\033[H\033[2J";
+pub const CLEAR: &str = "\x1b[H\x1b[2J";
 
 pub const BOLD: &str = "\x1b[1m";
 pub const DIM: &str = "\x1b[2m";

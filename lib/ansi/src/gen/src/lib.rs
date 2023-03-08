@@ -18,13 +18,11 @@ impl syn::parse::Parse for RGBInput {
 				return Err(syn::Error::new_spanned(lit, "expected u8 literal (0..=255)"));
 			};
 
-            if comma {
-                if input.parse::<syn::Token![,]>().is_err() {
-                    return Err(syn::Error::new_spanned(
-                        input.to_string(),
-                        "expected 3 comma-separated integers",
-                    ));
-                }
+            if comma && input.parse::<syn::Token![,]>().is_err() {
+                return Err(syn::Error::new_spanned(
+                    input.to_string(),
+                    "expected 3 comma-separated integers",
+                ));
             }
 
             Ok(val)
@@ -110,7 +108,7 @@ impl HexInput {
                 for c in s.chars() {
                     if !c.is_ascii_hexdigit() {
                         cs.push_str(format!("\x1b[31m{c}\x1b[39m").as_str());
-                        bits.push_str(format!("\x1b[31m^\x1b[39m").as_str());
+                        bits.push_str("\x1b[31m^\x1b[39m");
                     } else {
                         cs.push_str(format!("\x1b[32m{c}\x1b[39m").as_str());
                         bits.push(' ');
