@@ -2,12 +2,6 @@ use proc_macro::TokenStream;
 use quote::quote;
 use syn::parse::{Parse, Parser};
 
-#[proc_macro]
-pub fn custom(input: TokenStream) -> TokenStream {
-    let s = input.to_string();
-    quote!({ #s }).into()
-}
-
 struct RGBInput {
     r: u8,
     g: u8,
