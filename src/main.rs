@@ -1,4 +1,5 @@
 use ansi::{hex, rgb, rgb_bg};
+use ux::print;
 
 const SOME: &str = rgb!(0, 0, 0);
 
@@ -15,4 +16,11 @@ fn main() {
     // rgb!("hey", 0, 0);
     // rgb!(-1, 0, 0);
     // rgb!(256, 0, 0);
+
+    let s = "some-repeat-text-";
+    print!("{}", s.repeat(4));
+    print::start_end("this is at the start", "this is at the end");
+    print::end("this is at the end");
+    println!("some other text");
+    print::start_end(s.repeat(10), "END TEXT");
 }
