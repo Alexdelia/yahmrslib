@@ -1,2 +1,2 @@
 mod ask;
-use ask::ask;
+pub use ask::ask;
