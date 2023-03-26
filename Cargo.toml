@@ -5,6 +5,17 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "yahmrslib"
+path = "src/lib.rs"
+
+[features]
+default = ["ansi", "hmerr"]
+ansi = ["dep:ansi"]
+ux = ["dep:ux"]
+hmerr = ["dep:hmerr"]
+
 [dependencies]
-ansi = { path = "lib/ansi" }
-ux = { path = "lib/ux" }
+ansi = { path = "lib/ansi", optional = true }
+ux = { path = "lib/ux", optional = true }
+hmerr = { path = "lib/hmerr", optional = true }
