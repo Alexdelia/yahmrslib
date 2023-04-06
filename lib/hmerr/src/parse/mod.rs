@@ -1,12 +1,7 @@
+use crate::display::{
+    idx_padding, w_file, ERROR, FILE_SIGN, HELP, HELP_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN,
+};
 use std::fmt::Display;
-
-const ERROR: &str = "\x1b[0m\x1b[1;31merror\x1b[39m:\x1b[0m\t";
-const HELP: &str = "\x1b[0m\x1b[36mhelp\x1b[0m:\t";
-const SIDE: &str = "\x1b[0m\x1b[34m";
-
-const FILE_SIGN: &str = "\x1b[0m\x1b[1;34m-->\x1b[0m ";
-const SIDE_SIGN: &str = "\x1b[0m \x1b[1;34m|\x1b[0m ";
-const HELP_SIGN: &str = "\x1b[0m \x1b[1;34m=\x1b[0m ";
 
 // state
 #[derive(Debug, Clone)]
@@ -27,25 +22,21 @@ pub struct ParseFileError<L> {
 
 impl<L> Display for ParseFileError<L> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let padding: String = if let Some(index) = self.index {
-            " ".repeat(index.to_string().len())
-        } else {
-            String::new()
-        };
+        let padding = idx_padding(self.index);
 
         writeln!(f, "{ERROR}{}", self.error)?;
-        if let Some(file) = &self.file {
-            writeln!(
-                f,
-                "{padding}{FILE_SIGN}{file}{index}",
-                index = self
-                    .index
-                    .map(|i| format!(":{}", i))
-                    .unwrap_or(String::new()),
-            )?;
-        }
+        w_file(f, &padding, &self.file, &self.index)?;
         Ok(())
     }
+}
+
+fn w_line(f: &mut std::fmt::Formatter<'_>, line: &Line, padding: &str) -> std::fmt::Result {
+    writeln!(
+        f,
+        "{padding}{SIDE_SIGN}{line}",
+        padding = padding,
+        line = line
+    )
 }
 
 impl ParseFileError<NoLine> {
