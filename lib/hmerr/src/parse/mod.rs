@@ -3,24 +3,33 @@ use crate::display::{
 };
 use std::fmt::Display;
 
-// state
-#[derive(Debug, Clone)]
-pub struct NoLine;
-#[derive(Debug, Clone)]
-pub struct Line(String);
-
-#[derive(Debug, Clone)]
-pub struct ParseFileError<L> {
-    error: String,
-    file: Option<String>,
-    line: L,
-    index: Option<usize>,
-    wrong_bit: Option<Vec<(usize, usize)>>,
-    help: Option<String>,
-    source_file: Option<String>,
+#[derive(Debug, Clone, Default)]
+pub struct ParseFileError {
+    pub error: String,
+    pub help: Option<String>,
+    pub file: Option<String>,
+    pub line: Option<Line>,
+    pub source_file: Option<String>,
 }
 
-impl<L> Display for ParseFileError<L> {
+#[derive(Debug, Clone, Default)]
+pub struct Line {
+    pub line: String,
+    pub index: Option<usize>,
+    pub wrong: Vec<Wrong>,
+}
+
+#[derive(Debug, Clone)]
+pub enum Wrong {
+    Bit((usize, usize)),
+    Str(String),
+}
+
+// impl String.into() -> Wrong
+// impl (usize, usize).into() -> Wrong
+
+/*
+impl Display for ParseFileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let padding = idx_padding(self.index);
 
@@ -29,110 +38,75 @@ impl<L> Display for ParseFileError<L> {
         Ok(())
     }
 }
+*/
 
-fn w_line(f: &mut std::fmt::Formatter<'_>, line: &Line, padding: &str) -> std::fmt::Result {
-    writeln!(
-        f,
-        "{padding}{SIDE_SIGN}{line}",
-        padding = padding,
-        line = line
-    )
-}
-
-impl ParseFileError<NoLine> {
-    pub fn new(error: impl Into<String>) -> Self {
+impl ParseFileError {
+    pub fn new(
+        error: impl Into<String>,
+        file: impl Into<Option<String>>,
+        line: Option<Line>,
+        help: impl Into<Option<String>>,
+        source_file: impl Into<Option<String>>,
+    ) -> Self {
         Self {
             error: error.into(),
-            file: None,
-            line: NoLine,
-            index: None,
-            wrong_bit: None,
-            help: None,
-            source_file: None,
+            file: file.into(),
+            line,
+            help: help.into(),
+            source_file: source_file.into(),
         }
     }
 }
 
-impl<L> ParseFileError<L> {
-    pub fn line(self, line: impl Into<String>) -> ParseFileError<Line> {
-        ParseFileError {
-            error: self.error,
-            file: self.file,
-            line: Line(line.into()),
-            index: self.index,
-            wrong_bit: self.wrong_bit,
-            help: self.help,
-            source_file: self.source_file,
+impl Line {
+    pub fn new(line: impl Into<String>, index: Option<usize>, wrong: Vec<Wrong>) -> Self {
+        Self {
+            line: line.into(),
+            index,
+            wrong,
         }
     }
-
-    pub fn file(mut self, file: impl Into<String>) -> Self {
-        self.file = Some(file.into());
-        self
-    }
-
-    pub fn help(mut self, help: impl Into<String>) -> Self {
-        self.help = Some(help.into());
-        self
-    }
-
-    pub fn source_file(mut self, source_file: impl Into<String>) -> Self {
-        self.source_file = Some(source_file.into());
-        self
-    }
 }
 
-impl ParseFileError<Line> {
-    pub fn index(mut self, index: usize) -> Self {
-        self.index = Some(index);
-        self
-    }
-
-    pub fn wrong_bit(mut self, wrong_bit: Vec<(usize, usize)>) -> Self {
-        self.wrong_bit = Some(wrong_bit);
-        self
-    }
+#[macro_export]
+macro_rules! pfe {
+    ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)?) => {
+		$crate::parse::ParseFileError {
+			error: $error.into(),
+			$(file: Some($file.into()),)?
+			$(line: Some($line),)?
+			$(help: Some($help.into()),)?
+			source_file: Some(file!().to_string()),
+			..Default::default()
+		}
+    };
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[macro_export]
+macro_rules! ple {
+	($line:expr $(, i:$index:expr)? $(, w:$wrong:expr)?) => {
+		$crate::parse::Line {
+			line: $line.into(),
+			$(index: Some($index),)?
+			$(wrong: $wrong,)?
+			..Default::default()
+		}
+	};
+}
 
-    #[test]
-    fn test_parse_file_error() {
-        dbg!(ParseFileError::new("error")
-            .line("line")
-            .index(1)
-            .wrong_bit(vec![(1, 2)])
-            .help("help")
-            .source_file(file!()));
-
-        dbg!(ParseFileError::new("error")
-            .help("help")
-            .line("line")
-            .index(1)
-            .wrong_bit(vec![(1, 2)]));
-
-        dbg!(ParseFileError::new("error")
-            .help("help")
-            .line("line")
-            .wrong_bit(vec![(1, 2)])
-            .index(1));
-
-        /*
-        dbg!(ParseFileError::new("error")
-            .help("help")
-            .wrong_bit(vec![(1, 2)])
-            .line("line")
-            .index(1));
-        */
-
-        /*
-        dbg!(ParseFileError::new("error")
-            .help("help")
-            .index(1)
-            .line("line")
-            .wrong_bit(vec![(1, 2)]);
-        */
-    }
+#[macro_export]
+macro_rules! pwe {
+	// pwe!((42, 3)) => Vec<Wrong::Bit((42, 3))>
+	// pwe!((42, 3), (84, 7)) => Vec<Wrong::Bit((42, 3)), Wrong::Bit((84, 7))>
+	// pwe!("some string") => Vec<Wrong::Str("some string")>
+	// pwe!("some string", "another string") => Vec<Wrong::Str("some string"), Wrong::Str("another string")>
+	// pwe!("some string", (42, 3)) => Vec<Wrong::Str("some string"), Wrong::Bit((42, 3))>
+	($($wrong:expr),*) => {
+		vec![$(
+			match $wrong {
+				($start:expr, $end:expr) => $crate::parse::Wrong::Bit(($start, $end)),
+				_ => $crate::parse::Wrong::Str($wrong.into()),
+			}
+		),*]
+	};
 }

@@ -51,4 +51,17 @@ mod tests {
     fn test_signs() {
         println!("{FILE_SIGN}\n{SIDE_PADDING_SIGN}\n{SIDE_SIGN}\n{SIDE_PADDING_SIGN}\n{HELP_SIGN}");
     }
+
+    use crate::parse::Wrong;
+    use crate::{pfe, ple, pwe};
+    #[test]
+    fn test_new() {
+        // dbg!(pfe!("test"));
+        // dbg!(pfe!("test", h:"help", f:"file"));
+        // dbg!(pfe!("test", h:"help", f:"file", l:ple!("line")));
+        // dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:Wrong::Bit(vec![(42, 3)]))));
+        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!((42, 3)))));
+        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!((42, 3), (43, 4)))));
+        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!("test"))));
+    }
 }
