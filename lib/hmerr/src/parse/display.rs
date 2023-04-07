@@ -5,7 +5,8 @@ use crate::display::{
     SIDE_SIGN, SOURCE,
 };
 
-use std::{fmt::Display, ops::Range};
+use std::fmt::{Debug, Display};
+use std::ops::Range;
 
 impl Display for ParseFileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -28,7 +29,13 @@ impl Display for ParseFileError {
     }
 }
 
-pub fn idx_padding(n: Option<usize>) -> String {
+impl Debug for ParseFileError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        writeln!(f, "{ERROR}{}", self.error)
+    }
+}
+
+fn idx_padding(n: Option<usize>) -> String {
     if let Some(n) = n {
         " ".repeat(n.to_string().len())
     } else {

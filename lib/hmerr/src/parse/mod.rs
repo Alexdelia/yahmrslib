@@ -2,7 +2,7 @@ mod display;
 
 use std::error::Error;
 
-#[derive(Debug, Default)]
+#[derive(Default)]
 pub struct ParseFileError {
     pub error: String,
     pub help: Option<String>,
