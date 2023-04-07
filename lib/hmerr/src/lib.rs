@@ -1,4 +1,4 @@
-mod parse;
+pub mod parse;
 pub use parse::ParseFileError;
 mod display;
 

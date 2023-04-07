@@ -30,6 +30,7 @@ mod tests {
         // rgb!(256, 0, 0);
     }
 
+    /*
     #[test]
     fn test_ux() {
         use ux::print;
@@ -40,5 +41,13 @@ mod tests {
         print::end("this is at the end");
         println!("some other text");
         print::start_end(s.repeat(10), "END TEXT");
+    }
+    */
+
+    #[test]
+    fn test_hmerr_macro() {
+        use hmerr::pfe;
+
+        dbg!(pfe!("some error"));
     }
 }
