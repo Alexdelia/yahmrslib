@@ -11,6 +11,7 @@ pub fn remove<'t>(s: &'t str) -> Cow<'t, str> {
 pub const RESET: &str = "\x1b[0m";
 
 pub const CLEAR: &str = "\x1b[H\x1b[2J";
+pub const CLEAR_LINE: &str = "\x1b[2K";
 
 pub const BOLD: &str = "\x1b[1m";
 pub const DIM: &str = "\x1b[2m";
