@@ -31,7 +31,7 @@ impl Display for ParseFileError {
 
 impl Debug for ParseFileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "{ERROR}{}", self.error)
+        write!(f, "\x1b[2K\r{self}")
     }
 }
 
