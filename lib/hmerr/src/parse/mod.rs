@@ -1,7 +1,4 @@
-use crate::display::{
-    idx_padding, w_file, ERROR, FILE_SIGN, HELP, HELP_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN,
-};
-use std::fmt::Display;
+mod display;
 
 #[derive(Debug, Clone, Default)]
 pub struct ParseFileError {
@@ -21,12 +18,27 @@ pub struct Line {
 
 #[derive(Debug, Clone)]
 pub enum Wrong {
-    Bit((usize, usize)),
+    Bit((usize, usize)), // if bit from idx 42 to 45, then start = 42, end = 3
     Str(String),
 }
 
-// impl String.into() -> Wrong
-// impl (usize, usize).into() -> Wrong
+impl From<String> for Wrong {
+    fn from(s: String) -> Self {
+        Self::Str(s)
+    }
+}
+
+impl From<&str> for Wrong {
+    fn from(s: &str) -> Self {
+        Self::Str(s.to_string())
+    }
+}
+
+impl From<(usize, usize)> for Wrong {
+    fn from((start, end): (usize, usize)) -> Self {
+        Self::Bit((start, end))
+    }
+}
 
 /*
 impl Display for ParseFileError {
@@ -96,17 +108,7 @@ macro_rules! ple {
 
 #[macro_export]
 macro_rules! pwe {
-	// pwe!((42, 3)) => Vec<Wrong::Bit((42, 3))>
-	// pwe!((42, 3), (84, 7)) => Vec<Wrong::Bit((42, 3)), Wrong::Bit((84, 7))>
-	// pwe!("some string") => Vec<Wrong::Str("some string")>
-	// pwe!("some string", "another string") => Vec<Wrong::Str("some string"), Wrong::Str("another string")>
-	// pwe!("some string", (42, 3)) => Vec<Wrong::Str("some string"), Wrong::Bit((42, 3))>
 	($($wrong:expr),*) => {
-		vec![$(
-			match $wrong {
-				($start:expr, $end:expr) => $crate::parse::Wrong::Bit(($start, $end)),
-				_ => $crate::parse::Wrong::Str($wrong.into()),
-			}
-		),*]
+		vec![$($wrong.into()),*]
 	};
 }
