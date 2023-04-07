@@ -1,12 +1,15 @@
 mod display;
 
-#[derive(Debug, Clone, Default)]
+use std::error::Error;
+
+#[derive(Debug, Default)]
 pub struct ParseFileError {
     pub error: String,
     pub help: Option<String>,
     pub file: Option<String>,
     pub line: Option<Line>,
     pub source_file: Option<String>,
+    pub source: Option<Box<dyn Error + Send + Sync>>,
 }
 
 #[derive(Debug, Clone, Default)]
@@ -20,6 +23,12 @@ pub struct Line {
 pub enum Wrong {
     Bit((usize, usize)), // if bit from idx 42 to 45, then start = 42, end = 3
     Str(String),
+}
+
+impl Error for ParseFileError {
+    fn source(&self) -> Option<&(dyn Error + 'static)> {
+        self.source.as_ref().map(|e| &**e as _)
+    }
 }
 
 impl From<String> for Wrong {
@@ -47,6 +56,7 @@ impl ParseFileError {
         line: Option<Line>,
         help: impl Into<Option<String>>,
         source_file: impl Into<Option<String>>,
+        source: Option<Box<dyn Error + Send + Sync>>,
     ) -> Self {
         Self {
             error: error.into(),
@@ -54,6 +64,7 @@ impl ParseFileError {
             line,
             help: help.into(),
             source_file: source_file.into(),
+            source,
         }
     }
 }
@@ -70,13 +81,14 @@ impl Line {
 
 #[macro_export]
 macro_rules! pfe {
-    ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)?) => {
+    ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?) => {
 		$crate::parse::ParseFileError {
 			error: $error.into(),
 			$(file: Some($file.into()),)?
 			$(line: Some($line),)?
 			$(help: Some($help.into()),)?
 			source_file: Some(file!().to_string()),
+			$(source: Some(Box::new($source)),)?
 			..Default::default()
 		}
     };

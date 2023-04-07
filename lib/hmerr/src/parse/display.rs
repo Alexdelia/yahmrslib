@@ -2,7 +2,7 @@ use super::{Line, ParseFileError, Wrong};
 
 use crate::display::{
     ERROR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN,
-    SIDE_SIGN,
+    SIDE_SIGN, SOURCE,
 };
 
 use std::{fmt::Display, ops::Range};
@@ -21,6 +21,9 @@ impl Display for ParseFileError {
             w_help(f, &padding, &self.help)?;
         }
         w_source_file(f, &padding, &self.source_file)?;
+        if let Some(source) = &self.source {
+            writeln!(f, "{SOURCE}{source}")?;
+        }
         Ok(())
     }
 }
