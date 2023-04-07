@@ -40,18 +40,6 @@ impl From<(usize, usize)> for Wrong {
     }
 }
 
-/*
-impl Display for ParseFileError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let padding = idx_padding(self.index);
-
-        writeln!(f, "{ERROR}{}", self.error)?;
-        w_file(f, &padding, &self.file, &self.index)?;
-        Ok(())
-    }
-}
-*/
-
 impl ParseFileError {
     pub fn new(
         error: impl Into<String>,

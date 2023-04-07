@@ -9,7 +9,7 @@ use std::{fmt::Display, ops::Range};
 
 impl Display for ParseFileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let index = self.line.as_ref().map(|l| l.index).flatten();
+        let index = self.line.as_ref().and_then(|l| l.index);
         let padding = idx_padding(index);
 
         writeln!(f, "{ERROR}{}", self.error)?;
@@ -80,7 +80,7 @@ fn w_lint(
     line: &str,
     wrong: &Vec<Wrong>,
 ) -> std::fmt::Result {
-    let r = construct_range(&wrong, line);
+    let r = construct_range(wrong, line);
     if r.is_empty() {
         return Ok(());
     }
@@ -88,10 +88,10 @@ fn w_lint(
     let mut s = String::with_capacity(r.last().unwrap().end);
     let mut start = 0;
     let lint_sign = LINT_SIGN.to_string();
-    for i in 0..r.len() {
-        s.push_str(&" ".repeat(r[i].start - start));
-        s.push_str(&lint_sign.repeat(r[i].end - r[i].start));
-        start = r[i].end;
+    for i in r {
+        s.push_str(&" ".repeat(i.start - start));
+        s.push_str(&lint_sign.repeat(i.end - i.start));
+        start = i.end;
     }
     writeln!(f, "{padding}{SIDE_SIGN}{LINT_COLOR}{s}\x1b[0m")?;
 
@@ -164,9 +164,10 @@ mod tests {
     #[test]
     fn test_idx_padding() {
         assert_eq!(idx_padding(None), "");
-        assert_eq!(idx_padding(Some(0)), "");
+        assert_eq!(idx_padding(Some(0)), " ");
         assert_eq!(idx_padding(Some(1)), " ");
-        assert_eq!(idx_padding(Some(2)), "  ");
-        assert_eq!(idx_padding(Some(3)), "   ");
+        assert_eq!(idx_padding(Some(21)), "  ");
+        assert_eq!(idx_padding(Some(9)), " ");
+        assert_eq!(idx_padding(Some(100)), "   ");
     }
 }
