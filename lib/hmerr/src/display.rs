@@ -8,10 +8,10 @@ pub const SIDE_PADDING_SIGN: &str = "\x1b[0m\x1b[1;34m┆\x1b[0m ";
 pub const SIDE_SIGN: &str = "\x1b[0m\x1b[1;34m│\x1b[0m ";
 pub const HELP_SIGN: &str = "\x1b[0m\x1b[1;34m╧\x1b[0m ";
 
-pub const LINT_COLOR: &str = "\x1b[0m\x1b[1;33m";
-pub const LINT_SIGN: char = '⚠';
+pub const LINT_COLOR: &str = "\x1b[0m\x1b[1;38;2;255;0;64m";
+pub const LINT_SIGN: char = '▀';
 
-pub const FILE_SOURCE: &str = "\x1b[0m\x1b[2;3mcomming from:\t\x1b[1m";
+pub const FILE_SOURCE: &str = "\x1b[0m\x1b[2;3mgenerated in:\t\x1b[1m";
 
 #[cfg(test)]
 mod tests {
