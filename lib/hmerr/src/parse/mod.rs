@@ -79,6 +79,62 @@ impl Line {
     }
 }
 
+/// ParseFileError macro
+///
+/// # Arguments
+///
+/// * `error` - error message
+/// * `h:help` - help message	[optional]
+/// * `f:file` - file name		[optional]
+/// * `l:line` - line (can be generated with `ple!`)	[optional]
+/// * `s:source` - source error	[optional]
+///
+/// optional don't need to define (don't event need `None`)
+/// but they must be in order (for now)
+///
+/// # Example
+///
+/// ```
+/// use hmerr::{Result, pfe, ple, pwe};
+///
+/// const FILE_NAME: &str = "test.txt";
+/// const FILE_CONTENT: &str = "John 42
+/// Will 21
+/// Bob -21";
+///
+/// fn main() -> Result<()> {
+///		for (i, line) in FILE_CONTENT.lines().enumerate() {
+/// 		let s = line.split_whitespace().collect::<Vec<_>>();
+/// 		if s.len() != 2 {
+/// 			Err(pfe!(
+/// 				"line should have 2 elements\n<name> <number>",	// error message
+/// 																// no help message
+/// 				f:FILE_NAME,									// file name
+/// 				l:ple!(line, i:i)								// line	(`wrong` is not specified)
+/// 																// no source error
+/// 			))?;
+/// 		}
+///
+/// 		let name = s[0];
+/// 		let number = match s[1].parse::<u32>() {
+/// 			Ok(n) => n,
+/// 			Err(e) => {
+/// 				return Err(pfe!(
+/// 					"failed to parse <number>",					// error message
+/// 					h:"<number> is supposed to be a `u32`",		// help message
+/// 					f:FILE_NAME,								// file name
+/// 					l:ple!(line, i:i, w:pwe!(s[1])),			// line	(`wrong` is specified, it will search for `s[1]` in `line` and highlight it)
+/// 					s:e											// source error
+/// 				))?;
+/// 			}
+/// 		};
+///
+/// 		// do something with name and number
+///		}
+///
+/// 	Ok(())
+/// }
+/// ```
 #[macro_export]
 macro_rules! pfe {
     ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?) => {

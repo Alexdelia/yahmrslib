@@ -23,7 +23,7 @@ impl Display for ParseFileError {
         }
         w_source_file(f, &padding, &self.source_file)?;
         if let Some(source) = &self.source {
-            writeln!(f, "{SOURCE}{source}")?;
+            write!(f, "{SOURCE}{source}")?;
         }
         Ok(())
     }
@@ -37,9 +37,9 @@ impl Debug for ParseFileError {
 
 fn idx_padding(n: Option<usize>) -> String {
     if let Some(n) = n {
-        " ".repeat(n.to_string().len())
+        " ".repeat(n.to_string().len() + 1)
     } else {
-        String::new()
+        String::from(" ")
     }
 }
 
@@ -74,7 +74,7 @@ pub fn w_line(
     writeln!(f, "{padding}{SIDE_PADDING_SIGN}")?;
 
     if let Some(index) = line.index {
-        writeln!(f, "{SIDE}{index}{SIDE_SIGN}{}", line.line)?;
+        writeln!(f, "{SIDE}{index} {SIDE_SIGN}{}", line.line)?;
     } else {
         writeln!(f, "{padding}{SIDE_SIGN}{}", line.line)?;
     }
@@ -173,11 +173,11 @@ mod tests {
 
     #[test]
     fn test_idx_padding() {
-        assert_eq!(idx_padding(None), "");
-        assert_eq!(idx_padding(Some(0)), " ");
-        assert_eq!(idx_padding(Some(1)), " ");
-        assert_eq!(idx_padding(Some(21)), "  ");
-        assert_eq!(idx_padding(Some(9)), " ");
-        assert_eq!(idx_padding(Some(100)), "   ");
+        assert_eq!(idx_padding(None), " ");
+        assert_eq!(idx_padding(Some(0)), "  ");
+        assert_eq!(idx_padding(Some(1)), "  ");
+        assert_eq!(idx_padding(Some(21)), "   ");
+        assert_eq!(idx_padding(Some(9)), "  ");
+        assert_eq!(idx_padding(Some(100)), "    ");
     }
 }
