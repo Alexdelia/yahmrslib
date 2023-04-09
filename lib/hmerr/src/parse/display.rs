@@ -26,7 +26,7 @@ impl Display for ParseFileError {
         }
         w_source_file(f, &padding, &self.source_file)?;
         if let Some(source) = &self.source {
-            write!(f, "{SOURCE}{source}")?;
+            write!(f, "\n{SOURCE}{source}")?;
         }
         Ok(())
     }
@@ -53,7 +53,7 @@ pub fn w_file(
     index: &Option<usize>,
 ) -> std::fmt::Result {
     let Some(file) = file else {
-		return writeln!(f, "{padding}{FILE_SIGN}");
+		return write!(f, "\n{padding}{FILE_SIGN}");
 	};
 
     let index: String = if let Some(index) = index {
@@ -62,7 +62,7 @@ pub fn w_file(
         String::new()
     };
 
-    writeln!(f, "{padding}{FILE_SIGN}{FILE_COLOR}{file}{index}\x1b[0m")
+    write!(f, "\n{padding}{FILE_SIGN}{FILE_COLOR}{file}{index}\x1b[0m")
 }
 
 pub fn w_line(
@@ -75,7 +75,7 @@ pub fn w_line(
 		return Ok(());
 	};
 
-    writeln!(f, "{padding}{SIDE_PADDING_SIGN}")?;
+    writeln!(f, "\n{padding}{SIDE_PADDING_SIGN}")?;
 
     if let Some(index) = line.index {
         if source {
@@ -88,7 +88,7 @@ pub fn w_line(
 
     w_lint(f, padding, &line.line, &line.wrong)?;
 
-    writeln!(f, "{padding}{SIDE_PADDING_SIGN}")
+    write!(f, "{padding}{SIDE_PADDING_SIGN}")
 }
 
 fn w_lint(
@@ -110,7 +110,7 @@ fn w_lint(
         s.push_str(&lint_sign.repeat(i.end - i.start));
         start = i.end;
     }
-    writeln!(f, "{padding}{SIDE_SIGN}{LINT_COLOR}{s}\x1b[0m")?;
+    write!(f, "\n{padding}{SIDE_SIGN}{LINT_COLOR}{s}\x1b[0m")?;
 
     Ok(())
 }
@@ -156,9 +156,9 @@ pub fn w_help(
     help: &Option<String>,
 ) -> std::fmt::Result {
     if let Some(help) = help {
-        writeln!(f, "{padding}{HELP_SIGN}{HELP}{help}")
+        write!(f, "\n{padding}{HELP_SIGN}{HELP}{help}")
     } else {
-        writeln!(f, "{padding}{HELP_SIGN}")
+        write!(f, "\n{padding}{HELP_SIGN}")
     }
 }
 
