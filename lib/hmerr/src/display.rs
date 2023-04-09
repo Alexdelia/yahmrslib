@@ -12,28 +12,3 @@ pub const LINT_COLOR: &str = "\x1b[0m\x1b[1;38;2;255;0;64m";
 pub const LINT_SIGN: char = '▀';
 
 pub const FILE_SOURCE: &str = "\x1b[0m\x1b[2;3mgenerated in:\t\x1b[1m";
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_signs() {
-        println!("{FILE_SIGN}\n{SIDE_PADDING_SIGN}\n{SIDE_SIGN}\n{SIDE_PADDING_SIGN}\n{HELP_SIGN}");
-    }
-
-    use crate::{pfe, ple, pwe};
-    #[test]
-    fn test_new() {
-        dbg!(pfe!("test"));
-        dbg!(pfe!("test", h:"help", f:"file"));
-        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line")));
-        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!((42, 3)))));
-        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!((42, 3), (43, 4)))));
-        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!("test"))));
-        dbg!(
-            pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!("test", "some other test")))
-        );
-        dbg!(pfe!("test", h:"help", f:"file", l:ple!("line", i:1, w:pwe!("test", (42, 3)))));
-    }
-}

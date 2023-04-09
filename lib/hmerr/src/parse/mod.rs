@@ -90,6 +90,7 @@ impl Line {
 /// * `s:source` - source error	[optional]
 ///
 /// optional don't need to define (don't event need `None`)
+///
 /// but they must be in order (for now)
 ///
 /// # Example
@@ -107,11 +108,11 @@ impl Line {
 /// 		let s = line.split_whitespace().collect::<Vec<_>>();
 /// 		if s.len() != 2 {
 /// 			Err(pfe!(
-/// 				"line should have 2 elements\n<name> <number>",	// error message
-/// 																// no help message
-/// 				f:FILE_NAME,									// file name
-/// 				l:ple!(line, i:i)								// line	(`wrong` is not specified)
-/// 																// no source error
+/// 				"line should have 2 elements\n<name> <number>", // error message
+///	                                                                // no help message
+/// 				f:FILE_NAME,                                    // file name
+/// 				l:ple!(line, i:i)                               // line	(`wrong` is not specified)
+///	                                                                // no source error
 /// 			))?;
 /// 		}
 ///
@@ -120,11 +121,11 @@ impl Line {
 /// 			Ok(n) => n,
 /// 			Err(e) => {
 /// 				return Err(pfe!(
-/// 					"failed to parse <number>",					// error message
-/// 					h:"<number> is supposed to be a `u32`",		// help message
-/// 					f:FILE_NAME,								// file name
-/// 					l:ple!(line, i:i, w:pwe!(s[1])),			// line	(`wrong` is specified, it will search for `s[1]` in `line` and highlight it)
-/// 					s:e											// source error
+/// 					"failed to parse <number>",                 // error message
+/// 					h:"<number> is supposed to be a `u32`",     // help message
+/// 					f:FILE_NAME,                                // file name
+/// 					l:ple!(line, i:i, w:pwe!(s[1])),            // line	(`wrong` is specified, it will search for `s[1]` in `line` and highlight it)
+/// 					s:e                                         // source error
 /// 				))?;
 /// 			}
 /// 		};
@@ -150,6 +151,43 @@ macro_rules! pfe {
     };
 }
 
+/// Line macro
+///
+/// # Arguments
+///
+/// * `line` - line
+/// * `i:index` - index of the line	[optional]
+/// * `w:wrong` - wrong part of the line	[optional]
+///
+/// optional don't need to define (don't event need `None`)
+///
+/// but they must be in order (for now)
+///
+/// # Example
+///
+/// ```
+/// use hmerr::{ple, pwe};
+///
+/// let l = ple!("John 42", i:5, w:pwe!("42"));
+/// assert_eq!(l.line, "John 42");
+/// assert_eq!(l.index, Some(5));
+///
+/// let l = ple!("John 42");
+/// assert_eq!(l.line, "John 42");
+/// assert_eq!(l.index, None);
+///
+/// let l = ple!("John 42", i:5);
+/// assert_eq!(l.line, "John 42");
+/// assert_eq!(l.index, Some(5));
+///
+/// let l = ple!("John 42", w:pwe!("42"));
+/// assert_eq!(l.line, "John 42");
+/// assert_eq!(l.index, None);
+///
+/// /* does not compile for now
+/// let l = ple!("John 42", w:pwe!("42"), i:5);
+/// */
+/// ```
 #[macro_export]
 macro_rules! ple {
 	($line:expr $(, i:$index:expr)? $(, w:$wrong:expr)?) => {
@@ -162,6 +200,49 @@ macro_rules! ple {
 	};
 }
 
+/// Wrong macro
+///
+/// # Arguments
+///
+/// * `bit` - bit (start, end) [optional]
+/// * `str` - string		[optional]
+///
+/// for `bit`, if `line = "John 42"`:
+///
+/// ```
+/// /*
+/// "John 42"
+///  0123456
+/// */
+/// ```
+///
+/// and `wrong = "42"` `(5..7)`
+///
+/// then `bit = (5, 2)`
+///
+/// # Example
+///
+/// ```
+/// use hmerr::pwe;
+/// use hmerr::parse::Wrong;
+///
+/// // wrong part is "42"
+/// let w: Vec<Wrong> = pwe!("42");
+///
+/// // wrong part in "John 42" is index range (5..7)
+/// let w: Vec<Wrong> = pwe!((5, 2));
+///
+/// // wrong part in "John 42, Will 21" is "42" and "21"
+/// let w: Vec<Wrong> = pwe!("42", "21");
+///
+/// // wrong part in "John 42, Will 21" is index range (5..7) and (17..19)
+/// let w: Vec<Wrong> = pwe!((5, 2), (17, 2));
+///
+/// // wrong part in "John 42, Will 21" is "42" and index range (17..19)
+/// let w: Vec<Wrong> = pwe!("42", (17, 2));
+///
+/// // no limit on how many you can have
+/// ```
 #[macro_export]
 macro_rules! pwe {
 	($($wrong:expr),*) => {
