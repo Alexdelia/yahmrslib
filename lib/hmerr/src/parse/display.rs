@@ -16,7 +16,7 @@ impl Display for ParseFileError {
             padding = SOURCE_SIDE_SIGN.to_string() + &padding;
         }
 
-        writeln!(f, "{ERROR}{}", self.error)?;
+        write!(f, "{ERROR}{}", self.error)?;
         if !(self.line.is_none() && self.file.is_none()) {
             w_file(f, &padding, &self.file, &index)?;
         }
