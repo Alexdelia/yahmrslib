@@ -168,7 +168,7 @@ pub fn w_source_file(
     source_file: &Option<String>,
 ) -> std::fmt::Result {
     if let Some(source_file) = source_file {
-        writeln!(f, "{padding}{FILE_SOURCE}{source_file}")
+        write!(f, "\n{padding}{FILE_SOURCE}{source_file}")
     } else {
         Ok(())
     }
