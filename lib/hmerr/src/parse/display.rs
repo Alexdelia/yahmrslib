@@ -1,8 +1,8 @@
 use super::{Line, ParseFileError, Wrong};
 
 use crate::display::{
-    ERROR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN,
-    SIDE_SIGN, SOURCE,
+    ERROR, FILE_COLOR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, LINT_COLOR, LINT_SIGN, SIDE,
+    SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE, SOURCE_SIDE_SIGN,
 };
 
 use std::fmt::{Debug, Display};
@@ -11,13 +11,16 @@ use std::ops::Range;
 impl Display for ParseFileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let index = self.line.as_ref().and_then(|l| l.index);
-        let padding = idx_padding(index);
+        let mut padding = idx_padding(index);
+        if self.source.is_some() {
+            padding = SOURCE_SIDE_SIGN.to_string() + &padding;
+        }
 
         writeln!(f, "{ERROR}{}", self.error)?;
         if !(self.line.is_none() && self.file.is_none()) {
             w_file(f, &padding, &self.file, &index)?;
         }
-        w_line(f, &padding, &self.line)?;
+        w_line(f, &padding, &self.line, self.source.is_some())?;
         if !(self.line.is_none() && self.file.is_none() && self.help.is_none()) {
             w_help(f, &padding, &self.help)?;
         }
@@ -54,18 +57,19 @@ pub fn w_file(
 	};
 
     let index: String = if let Some(index) = index {
-        format!(":{}", index)
+        format!("\x1b[0m{SIDE}:\x1b[0m{FILE_COLOR}{index}")
     } else {
         String::new()
     };
 
-    writeln!(f, "{padding}{FILE_SIGN}{file}{index}")
+    writeln!(f, "{padding}{FILE_SIGN}{FILE_COLOR}{file}{index}\x1b[0m")
 }
 
 pub fn w_line(
     f: &mut std::fmt::Formatter<'_>,
     padding: &str,
     line: &Option<Line>,
+    source: bool,
 ) -> std::fmt::Result {
     let Some(line) = line else {
 		return Ok(());
@@ -74,6 +78,9 @@ pub fn w_line(
     writeln!(f, "{padding}{SIDE_PADDING_SIGN}")?;
 
     if let Some(index) = line.index {
+        if source {
+            write!(f, "{SOURCE_SIDE_SIGN}")?;
+        }
         writeln!(f, "{SIDE}{index} {SIDE_SIGN}{}", line.line)?;
     } else {
         writeln!(f, "{padding}{SIDE_SIGN}{}", line.line)?;
