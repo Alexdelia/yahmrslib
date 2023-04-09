@@ -138,7 +138,7 @@ impl Line {
 /// ```
 #[macro_export]
 macro_rules! pfe {
-    ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?) => {
+    ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?$(,)?) => {
 		$crate::parse::ParseFileError {
 			error: $error.into(),
 			$(file: Some($file.into()),)?
@@ -190,7 +190,7 @@ macro_rules! pfe {
 /// ```
 #[macro_export]
 macro_rules! ple {
-	($line:expr $(, i:$index:expr)? $(, w:$wrong:expr)?) => {
+	($line:expr $(, i:$index:expr)? $(, w:$wrong:expr)?$(,)?) => {
 		$crate::parse::Line {
 			line: $line.into(),
 			$(index: Some($index),)?
