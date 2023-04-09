@@ -1,4 +1,5 @@
 pub const ERROR: &str = "\x1b[0m\x1b[1;31merror\x1b[39m:\x1b[0m\t";
+pub const WARNING: &str = "\x1b[0m\x1b[1;33mwarning\x1b[39m:\x1b[0m\t";
 pub const HELP: &str = "\x1b[0m\x1b[36mhelp\x1b[0m\x1b[1m:\x1b[0m ";
 pub const SIDE: &str = "\x1b[0m\x1b[1;34m";
 pub const SOURCE: &str = "\x1b[0m\x1b[1;31m╰╴caused by╶╮\x1b[0m\n";
