@@ -89,7 +89,7 @@ impl Line {
 /// * `l:line` - line (can be generated with `ple!`)	[optional]
 /// * `s:source` - source error	[optional]
 ///
-/// optional don't need to define (don't event need `None`)
+/// optional don't need to define (don't even need `None`)
 ///
 /// but they must be in order (for now)
 ///
@@ -139,7 +139,7 @@ impl Line {
 #[macro_export]
 macro_rules! pfe {
     ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?$(,)?) => {
-		$crate::parse::ParseFileError {
+		Err($crate::parse::ParseFileError {
 			error: $error.into(),
 			$(file: Some($file.into()),)?
 			$(line: Some($line),)?
@@ -147,7 +147,7 @@ macro_rules! pfe {
 			source_file: Some(file!().to_string()),
 			$(source: Some(Box::new($source)),)?
 			..Default::default()
-		}
+		})
     };
 }
 
@@ -159,7 +159,7 @@ macro_rules! pfe {
 /// * `i:index` - index of the line	[optional]
 /// * `w:wrong` - wrong part of the line	[optional]
 ///
-/// optional don't need to define (don't event need `None`)
+/// optional don't need to define (don't even need `None`)
 ///
 /// but they must be in order (for now)
 ///
