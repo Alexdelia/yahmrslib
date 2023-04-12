@@ -51,6 +51,7 @@ mod tests {
     fn test_hmerr_macro() {
         use hmerr::pfe;
 
-        dbg!(pfe!("some error"));
+        let r: Result<(), _> = pfe!("some error");
+        dbg!(r.unwrap_err());
     }
 }

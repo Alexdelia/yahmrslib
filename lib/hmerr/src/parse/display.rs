@@ -26,7 +26,7 @@ impl Display for ParseFileError {
         }
         w_source_file(f, &padding, &self.source_file)?;
         if let Some(source) = &self.source {
-            write!(f, "\n{SOURCE}{source}")?;
+            write!(f, "\n{SOURCE}{source}\x1b[0m")?;
         }
         Ok(())
     }
@@ -168,7 +168,7 @@ pub fn w_source_file(
     source_file: &Option<String>,
 ) -> std::fmt::Result {
     if let Some(source_file) = source_file {
-        write!(f, "\n{padding}{FILE_SOURCE}{source_file}")
+        write!(f, "\n{padding}{FILE_SOURCE}{source_file}\x1b[0m")
     } else {
         Ok(())
     }
