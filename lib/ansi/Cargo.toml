@@ -8,7 +8,7 @@ description = "A simple ANSI escape code const and macro generator, no dependenc
 [features]
 default = ["abbrev"]
 abbrev = []
-remove = ["dep:remove"]
+remove = ["dep:ansi-regex"]
 gen = ["dep:gen", "dep:const_format"]
 
 
