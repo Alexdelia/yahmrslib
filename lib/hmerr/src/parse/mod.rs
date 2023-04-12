@@ -191,11 +191,13 @@ macro_rules! pfe {
 #[macro_export]
 macro_rules! ple {
 	($line:expr $(, i:$index:expr)? $(, w:$wrong:expr)?$(,)?) => {
-		$crate::parse::Line {
-			line: $line.into(),
-			$(index: Some($index),)?
-			$(wrong: $wrong,)?
-			..Default::default()
+		{
+			#[allow(clippy::needless_update)] $crate::parse::Line {
+				line: $line.into(),
+				$(index: Some($index),)?
+				$(wrong: $wrong,)?
+				..Default::default()
+			}
 		}
 	};
 }
