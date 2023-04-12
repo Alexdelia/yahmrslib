@@ -19,14 +19,14 @@ jobs:
         lib: ["ansi", "hmerr", "ux", "spof"]
         test:
           [
-            "check --all-features",
-            "test --all-features",
-            "doc --all-features",
-            "clippy --all-features",
-            "fmt --check",
+            { name: "check", cmd: "check --all-features" },
+            { name: "test", cmd: "test --all-features" },
+            { name: "doc", cmd: "doc --all-features" },
+            { name: "clippy", cmd: "clippy --all-features" },
+            { name: "fmt", cmd: "fmt --check" },
           ]
 
     steps:
       - uses: actions/checkout@v3
-      - name: ${{ matrix.test }} ${{ matrix.lib }}
-        run: cargo ${{ matrix.test }} --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
+      - name: ${{ matrix.test.name }} ${{ matrix.lib }}
+        run: cargo ${{ matrix.test.cmd }} --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
