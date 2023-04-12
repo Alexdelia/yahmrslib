@@ -1,5 +1,3 @@
-#![allow(clippy::needless_update)]
-
 mod display;
 
 use std::error::Error;
@@ -141,6 +139,7 @@ impl Line {
 #[macro_export]
 macro_rules! pfe {
     ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?$(,)?) => {
+		#![allow(clippy::needless_update)]
 		Err($crate::parse::ParseFileError {
 			error: $error.into(),
 			$(file: Some($file.into()),)?
