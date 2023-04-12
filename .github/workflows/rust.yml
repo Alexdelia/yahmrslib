@@ -22,4 +22,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: ${{ matrix.test }} ${{ matrix.lib }}
-        run: cargo ${{ matrix.test }} --all-features --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
+        run: cargo ${{ matrix.test }} -- --all-features --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
