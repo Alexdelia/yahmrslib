@@ -1,11 +1,14 @@
 #[cfg(feature = "ansi")]
 pub use ansi;
 
+#[cfg(feature = "hmerr")]
+pub use hmerr;
+
 #[cfg(feature = "ux")]
 pub use ux;
 
-#[cfg(feature = "hmerr")]
-pub use hmerr;
+#[cfg(feature = "spof")]
+pub use spof;
 
 #[cfg(test)]
 mod tests {

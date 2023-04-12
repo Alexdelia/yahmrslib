@@ -12,10 +12,12 @@ path = "src/lib.rs"
 [features]
 default = ["ansi", "hmerr"]
 ansi = ["dep:ansi"]
-ux = ["dep:ux"]
 hmerr = ["dep:hmerr"]
+ux = ["dep:ux"]
+spof = ["dep:spof"]
 
 [dependencies]
 ansi = { path = "lib/ansi", optional = true }
-ux = { path = "lib/ux", optional = true }
 hmerr = { path = "lib/hmerr", optional = true }
+ux = { path = "lib/ux", optional = true }
+spof = { path = "lib/spof", optional = true }
