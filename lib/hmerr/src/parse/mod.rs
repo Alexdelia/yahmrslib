@@ -1,3 +1,5 @@
+#![allow(clippy::needless_update)]
+
 mod display;
 
 use std::error::Error;
