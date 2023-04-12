@@ -84,10 +84,10 @@ impl Line {
 /// # Arguments
 ///
 /// * `error` - error message
-/// * `h:help` - help message   [optional]
-/// * `f:file` - file name      [optional]
-/// * `l:line` - line (can be generated with `ple!`) [optional]
-/// * `s:source` - source error [optional]
+/// * `h:help` - help message   |optional|
+/// * `f:file` - file name      |optional|
+/// * `l:line` - line (can be generated with `ple!`) |optional|
+/// * `s:source` - source error |optional|
 ///
 /// optional don't need to define (don't even need `None`)
 ///
@@ -156,8 +156,8 @@ macro_rules! pfe {
 /// # Arguments
 ///
 /// * `line` - line
-/// * `i:index` - index of the line         [optional]
-/// * `w:wrong` - wrong part of the line    [optional]
+/// * `i:index` - index of the line         |optional|
+/// * `w:wrong` - wrong part of the line    |optional|
 ///
 /// optional don't need to define (don't even need `None`)
 ///
@@ -206,16 +206,14 @@ macro_rules! ple {
 ///
 /// # Arguments
 ///
-/// * `bit` - bit (start, end) [optional]
-/// * `str` - string           [optional]
+/// * `bit` - bit (start, end) |optional|
+/// * `str` - string           |optional|
 ///
 /// for `bit`, if `line = "John 42"`:
 ///
-/// ```
-/// /*
+/// ```text
 /// "John 42"
 ///  0123456
-/// */
 /// ```
 ///
 /// and `wrong = "42"` `(5..7)`
