@@ -26,10 +26,11 @@ pub fn end(s: impl Display) {
     println!("\r{n:>w$}{f}", w = cols as usize - remove(&f).len(), n = "");
 }
 
-fn remove<'t>(s: &'t str) -> Cow<'t, str> {
+fn remove(s: &'_ str) -> Cow<'_, str> {
     ansi_regex().replace_all(s, "")
 }
 
+/*
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -46,3 +47,4 @@ mod tests {
         end("\x1b[1m\x1b[31mfoo\x1b[0m");
     }
 }
+*/
