@@ -10,19 +10,6 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  check:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        lib: ["ansi", "hmerr", "ux", "spof"]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: check ${{ matrix.lib }}
-        run: cargo check --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
-
   test:
     runs-on: ubuntu-latest
 
@@ -30,21 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         lib: ["ansi", "hmerr", "ux", "spof"]
+        test: ["check", "test", "clippy"]
 
     steps:
       - uses: actions/checkout@v3
-      - name: test ${{ matrix.lib }}
-        run: cargo test --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
-
-  clippy:
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        lib: ["ansi", "hmerr", "ux", "spof"]
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: clippy ${{ matrix.lib }}
-        run: cargo clippy --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
+      - name: ${{ matrix.test }} ${{ matrix.lib }}
+        run: cargo ${{ matrix.test }} --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
