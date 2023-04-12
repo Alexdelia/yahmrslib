@@ -1,0 +1,9 @@
+[package]
+name = "spof"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+yahmrslib = { git = "https://github.com/Alexdelia/yahmrslib.git", default-features = false, features = ["ansi", "hmerr"] }
