@@ -103,30 +103,30 @@ impl Line {
 /// Will 21
 /// Bob -21";
 ///
-/// fn main() -> Result<()> {
+/// fn some_main() -> Result<()> {
 ///		for (i, line) in FILE_CONTENT.lines().enumerate() {
 /// 		let s = line.split_whitespace().collect::<Vec<_>>();
 /// 		if s.len() != 2 {
-/// 			Err(pfe!(
+/// 			pfe!(
 /// 				"line should have 2 elements\n<name> <number>", // error message
 ///	                                                                // no help message
 /// 				f:FILE_NAME,                                    // file name
 /// 				l:ple!(line, i:i)                               // line	(`wrong` is not specified)
 ///	                                                                // no source error
-/// 			))?;
+/// 			)?;
 /// 		}
 ///
 /// 		let name = s[0];
 /// 		let number = match s[1].parse::<u32>() {
 /// 			Ok(n) => n,
 /// 			Err(e) => {
-/// 				return Err(pfe!(
+/// 				return pfe!(
 /// 					"failed to parse <number>",                 // error message
 /// 					h:"<number> is supposed to be a `u32`",     // help message
 /// 					f:FILE_NAME,                                // file name
 /// 					l:ple!(line, i:i, w:pwe!(s[1])),            // line	(`wrong` is specified, it will search for `s[1]` in `line` and highlight it)
 /// 					s:e                                         // source error
-/// 				))?;
+/// 				)?;
 /// 			}
 /// 		};
 ///

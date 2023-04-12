@@ -110,7 +110,7 @@ fn w_lint(
         s.push_str(&lint_sign.repeat(i.end - i.start));
         start = i.end;
     }
-    write!(f, "\n{padding}{SIDE_SIGN}{LINT_COLOR}{s}\x1b[0m")?;
+    writeln!(f, "{padding}{SIDE_SIGN}{LINT_COLOR}{s}\x1b[0m")?;
 
     Ok(())
 }
