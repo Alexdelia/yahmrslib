@@ -139,8 +139,7 @@ impl Line {
 #[macro_export]
 macro_rules! pfe {
     ($error:expr $(, h:$help:expr)? $(, f:$file:expr)? $(, l:$line:expr)? $(, s:$source:expr)?$(,)?) => {
-		Err($crate::parse::ParseFileError {
-			#[allow(clippy::needless_update)]
+		Err(#[allow(clippy::needless_update)] $crate::parse::ParseFileError {
 			error: $error.into(),
 			$(file: Some($file.into()),)?
 			$(line: Some($line),)?
