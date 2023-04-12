@@ -84,10 +84,10 @@ impl Line {
 /// # Arguments
 ///
 /// * `error` - error message
-/// * `h:help` - help message	[optional]
-/// * `f:file` - file name		[optional]
-/// * `l:line` - line (can be generated with `ple!`)	[optional]
-/// * `s:source` - source error	[optional]
+/// * `h:help` - help message   [optional]
+/// * `f:file` - file name      [optional]
+/// * `l:line` - line (can be generated with `ple!`) [optional]
+/// * `s:source` - source error [optional]
 ///
 /// optional don't need to define (don't even need `None`)
 ///
@@ -104,36 +104,36 @@ impl Line {
 /// Bob -21";
 ///
 /// fn some_main() -> Result<()> {
-///		for (i, line) in FILE_CONTENT.lines().enumerate() {
-/// 		let s = line.split_whitespace().collect::<Vec<_>>();
-/// 		if s.len() != 2 {
-/// 			pfe!(
-/// 				"line should have 2 elements\n<name> <number>", // error message
-///	                                                                // no help message
-/// 				f:FILE_NAME,                                    // file name
-/// 				l:ple!(line, i:i)                               // line	(`wrong` is not specified)
-///	                                                                // no source error
-/// 			)?;
-/// 		}
+///     for (i, line) in FILE_CONTENT.lines().enumerate() {
+///         let s = line.split_whitespace().collect::<Vec<_>>();
+///         if s.len() != 2 {
+///             pfe!(
+///                  "line should have 2 elements\n<name> <number>", // error message
+///                                                                 // no help message
+///                  f:FILE_NAME,                                    // file name
+///                  l:ple!(line, i:i)                               // line (`wrong` is not specified)
+///                                                                 // no source error
+///             )?;
+///         }
 ///
-/// 		let name = s[0];
-/// 		let number = match s[1].parse::<u32>() {
-/// 			Ok(n) => n,
-/// 			Err(e) => {
-/// 				return pfe!(
-/// 					"failed to parse <number>",                 // error message
-/// 					h:"<number> is supposed to be a `u32`",     // help message
-/// 					f:FILE_NAME,                                // file name
-/// 					l:ple!(line, i:i, w:pwe!(s[1])),            // line	(`wrong` is specified, it will search for `s[1]` in `line` and highlight it)
-/// 					s:e                                         // source error
-/// 				)?;
-/// 			}
-/// 		};
+///         let name = s[0];
+///         let number = match s[1].parse::<u32>() {
+///             Ok(n) => n,
+///             Err(e) => {
+///                 return pfe!(
+///                     "failed to parse <number>",                 // error message
+///                     h:"<number> is supposed to be a `u32`",     // help message
+///                     f:FILE_NAME,                                // file name
+///                     l:ple!(line, i:i, w:pwe!(s[1])),            // line (`wrong` is specified, it will search for `s[1]` in `line` and highlight it)
+///                     s:e                                         // source error
+///                 )?;
+///             }
+///         };
 ///
-/// 		// do something with name and number
-///		}
+///         // do something with name and number
+///     }
 ///
-/// 	Ok(())
+///     Ok(())
 /// }
 /// ```
 #[macro_export]
@@ -156,8 +156,8 @@ macro_rules! pfe {
 /// # Arguments
 ///
 /// * `line` - line
-/// * `i:index` - index of the line	[optional]
-/// * `w:wrong` - wrong part of the line	[optional]
+/// * `i:index` - index of the line         [optional]
+/// * `w:wrong` - wrong part of the line    [optional]
 ///
 /// optional don't need to define (don't even need `None`)
 ///
@@ -205,7 +205,7 @@ macro_rules! ple {
 /// # Arguments
 ///
 /// * `bit` - bit (start, end) [optional]
-/// * `str` - string		[optional]
+/// * `str` - string           [optional]
 ///
 /// for `bit`, if `line = "John 42"`:
 ///
