@@ -1,12 +1,11 @@
+#[cfg(feature = "gen")]
 pub use ::const_format::formatcp as __formatcp;
+
+#[cfg(feature = "gen")]
 pub use gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
 
-use ansi_regex::ansi_regex;
-use std::borrow::Cow;
-
-pub fn remove<'t>(s: &'t str) -> Cow<'t, str> {
-    ansi_regex().replace_all(s, "")
-}
+#[cfg(feature = "remove")]
+pub use remove::remove;
 
 pub const RESET: &str = "\x1b[0m";
 
@@ -81,6 +80,7 @@ pub const BG_BRIGHT_MAGENTA: &str = "\x1b[105m";
 pub const BG_BRIGHT_CYAN: &str = "\x1b[106m";
 pub const BG_BRIGHT_WHITE: &str = "\x1b[107m";
 
+#[cfg(feature = "abbrev")]
 pub mod abbrev {
     use super::*;
 

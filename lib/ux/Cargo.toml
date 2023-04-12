@@ -2,8 +2,8 @@
 name = "ux"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Alexdelia"]
+description = "simple library to handle user xperience"
 
 [dependencies]
 ansi-regex = "0.1.0"

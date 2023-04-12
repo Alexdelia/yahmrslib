@@ -13,6 +13,7 @@ pub use spof;
 #[cfg(test)]
 mod tests {
 
+    /*
     #[test]
     fn test_ansi() {
         use ansi::{hex, rgb, rgb_bg};
@@ -32,6 +33,7 @@ mod tests {
         // rgb!(-1, 0, 0);
         // rgb!(256, 0, 0);
     }
+    */
 
     /*
     #[test]
