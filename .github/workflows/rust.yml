@@ -17,9 +17,16 @@ jobs:
       fail-fast: false
       matrix:
         lib: ["ansi", "hmerr", "ux", "spof"]
-        test: ["check", "test", "doc", "clippy", "fmt --check --"]
+        test:
+          [
+            "check --all-features",
+            "test --all-features",
+            "doc --all-features",
+            "clippy --all-features",
+            "fmt --check",
+          ]
 
     steps:
       - uses: actions/checkout@v3
       - name: ${{ matrix.test }} ${{ matrix.lib }}
-        run: cargo ${{ matrix.test }} --all-features --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
+        run: cargo ${{ matrix.test }} --verbose --manifest-path=lib/${{ matrix.lib }}/Cargo.toml
