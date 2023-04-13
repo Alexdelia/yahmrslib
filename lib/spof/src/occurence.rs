@@ -1,6 +1,6 @@
 use std::fmt::{Debug, Display};
 
-use yahmrslib::ansi::abbrev::{B, D, G, I, R};
+use ansi::abbrev::{B, D, G, I, R};
 
 #[derive(Default)]
 pub enum Occurence {

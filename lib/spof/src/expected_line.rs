@@ -1,8 +1,8 @@
 use super::{Format, Keyword, Occurence};
 use crate::FileData;
 
-use yahmrslib::ansi::abbrev::{B, D, G, M, R, Y};
-use yahmrslib::hmerr::{pfe, ple, pwe, Result};
+use ansi::abbrev::{B, D, G, M, R, Y};
+use hmerr::{pfe, ple, pwe, Result};
 
 pub struct ExpectedLine {
     pub k: Keyword,

@@ -6,4 +6,5 @@ authors = ["Alexdelia"]
 description = "Simple Parser Of Files, hand made simple parser with no external dependencies"
 
 [dependencies]
-yahmrslib = { git = "https://github.com/Alexdelia/yahmrslib.git", default-features = false, features = ["ansi", "hmerr"] }
+ansi = { git = "https://github.com/Alexdelia/yahmrslib.git" }
+hmerr = { git = "https://github.com/Alexdelia/yahmrslib.git" }

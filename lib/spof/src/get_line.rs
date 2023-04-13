@@ -1,7 +1,7 @@
 use crate::{ExpectedLine, FileData};
 
-use yahmrslib::ansi::abbrev::{B, D, Y};
-use yahmrslib::hmerr::{pfe, Result};
+use ansi::abbrev::{B, D, Y};
+use hmerr::{pfe, Result};
 
 type ParsedLine = (Vec<String>, usize); // (tokens, line_index)
 
