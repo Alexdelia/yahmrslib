@@ -1,9 +1,7 @@
-use crate::{ExpectedLine, FileData};
+use crate::{ExpectedLine, FileData, ParsedLine};
 
 use ansi::abbrev::{B, D, Y};
 use hmerr::{pfe, Result};
-
-type ParsedLine = (Vec<String>, usize); // (tokens, line_index)
 
 pub fn get_line(f: &FileData, el: ExpectedLine) -> Result<Vec<ParsedLine>> {
     let mut ret: Vec<ParsedLine> = Vec::new();
