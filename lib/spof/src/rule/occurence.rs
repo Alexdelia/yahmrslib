@@ -62,6 +62,75 @@ impl Occurence {
     }
 }
 
+/// macro to create a new Occurence
+///
+/// # Example
+///
+/// ```
+/// use crate::Occurence;
+///
+/// let occ = occurence!(Once);
+/// assert_eq!(occ, Occurence::Once);
+///
+/// let occ = occurence!(Optional);
+/// assert_eq!(occ, Occurence::Optional);
+///
+/// let occ = occurence!(ZeroOrMore);
+/// assert_eq!(occ, Occurence::ZeroOrMore);
+///
+/// let occ = occurence!(OneOrMore);
+/// assert_eq!(occ, Occurence::OneOrMore);
+///
+/// let occ = occurence!(42);
+/// assert_eq!(occ, Occurence::Exactly(42));
+///
+/// let occ = occurence!(1, 42);
+/// assert_eq!(occ, Occurence::Range(1, 42));
+///
+/// let n = 42;
+/// let occ = occurence!(n);
+/// assert_eq!(occ, Occurence::Exactly(n));
+///
+/// let min = 1;
+/// let max = 42;
+/// let occ = occurence!(min, max);
+/// assert_eq!(occ, Occurence::Range(min, max));
+///
+/// for occ in vec![
+///    Occurence::Once,
+///    Occurence::Optional,
+///    Occurence::ZeroOrMore,
+///    Occurence::OneOrMore,
+///    Occurence::Exactly(42),
+///    Occurence::Range(1, 42),
+/// ] {
+///    assert_eq!(occ, occurence!(occ));
+/// }
+/// ```
+macro_rules! occurence {
+    (Once) => {
+        Occurence::Once
+    };
+    (Optional) => {
+        Occurence::Optional
+    };
+    (ZeroOrMore) => {
+        Occurence::ZeroOrMore
+    };
+    (OneOrMore) => {
+        Occurence::OneOrMore
+    };
+    ($n:expr) => {
+        Occurence::Exactly($n)
+    };
+    ($min:expr, $max:expr) => {
+        Occurence::Range($min, $max)
+    };
+    ($occ:expr) => {
+        $occ
+    };
+}
+
 #[cfg(test)]
 mod test {
     use super::*;

@@ -1,25 +1,35 @@
+use crate::{FoundLine, Rule};
+
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::Result;
 use std::io::{BufRead, BufReader};
 use std::path::Path;
 
 pub struct FileData {
-    pub name: String,
-    pub content: Vec<String>,
-    pub diluted: Vec<String>,
+    name: String,
+    content: Vec<String>,
+    comment: Option<String>,
+    rule: Rule,
+    found: HashMap<String, FoundLine>,
 }
 
 impl FileData {
-    pub fn new(path: impl AsRef<Path>, comment: Option<&'static str>) -> Result<Self> {
+    pub fn new(
+        path: impl AsRef<Path>,
+        comment: impl Into<Option<String>>,
+        rule: Rule,
+    ) -> Result<Self> {
         let path = path.as_ref();
         let name = path.to_string_lossy().to_string();
         let content = Self::unwrap_reader(BufReader::new(File::open(path)?))?;
-        let diluted = Self::pre_parse(content.clone(), comment);
 
         Ok(Self {
             name,
             content,
-            diluted,
+            comment: comment.into(),
+            rule,
+            found: HashMap::new(),
         })
     }
 
@@ -33,23 +43,17 @@ impl FileData {
         Ok(ret)
     }
 
-    fn pre_parse(content: Vec<String>, comment: Option<&'static str>) -> Vec<String> {
-        let mut ret = Vec::new();
+    /// remove comment and trim whitespace
+    fn pre_parse(&self, line: String) -> String {
+        let mut line = line;
 
-        // remove comment and trim whitespace
-        for line in content {
-            let mut line = line;
-
-            if let Some(comment) = comment {
-                if let Some(i) = line.find(comment) {
-                    line = line[..i].to_owned();
-                }
+        if let Some(comment) = &self.comment {
+            if let Some(i) = line.find(comment) {
+                line = line[..i].to_owned();
             }
-
-            ret.push(line.trim().to_string());
         }
 
-        ret
+        line.trim().to_string()
     }
 }
 

@@ -74,6 +74,74 @@ impl Size {
     }
 }
 
+/// macro to create a new ExpectedSize
+///
+/// # Example
+///
+/// ```
+/// use crate::ExpectedSize;
+///
+/// let es = expected_size!(Fixed);
+/// assert_eq!(es, ExpectedSize::Fixed);
+///
+/// let es = expected_size!(Undefined);
+/// assert_eq!(es, ExpectedSize::Undefined);
+///
+/// let es = expected_size!(1, 3);
+/// assert_eq!(es, ExpectedSize::Range(1, 3));
+///
+/// let es = expected_size!((1, 3));
+/// assert_eq!(es, ExpectedSize::Range(1, 3));
+///
+/// let var = ExpectedSize::Fixed;
+/// let es = expected_size!(var);
+/// assert_eq!(es, ExpectedSize::Fixed);
+///
+/// let var = ExpectedSize::Undefined;
+/// let es = expected_size!(var);
+/// assert_eq!(es, ExpectedSize::Undefined);
+///
+/// let var = ExpectedSize::Range(1, 3);
+/// let es = expected_size!(var);
+/// assert_eq!(es, ExpectedSize::Range(1, 3));
+///
+/// let min = 1;
+/// let max = 3;
+/// let es = expected_size!(min, max);
+/// assert_eq!(es, ExpectedSize::Range(1, 3));
+///
+/// let r = (1, 3);
+/// let es = expected_size!(r);
+/// assert_eq!(es, ExpectedSize::Range(1, 3));
+///
+/// let es = expected_size!(ExpectedSize::Fixed);
+/// assert_eq!(es, ExpectedSize::Fixed);
+///
+/// let es = expected_size!(ExpectedSize::Undefined);
+/// assert_eq!(es, ExpectedSize::Undefined);
+///
+/// let es = expected_size!(ExpectedSize::Range(1, 3));
+/// assert_eq!(es, ExpectedSize::Range(1, 3));
+/// ```
+#[macro_export]
+macro_rules! expected_size {
+    (Fixed) => {
+        ExpectedSize::Fixed
+    };
+    (Undefined) => {
+        ExpectedSize::Undefined
+    };
+    ($min:expr, $max:expr) => {
+        ExpectedSize::Range($min, $max)
+    };
+    (($min:expr, $max:expr)) => {
+        ExpectedSize::Range($min, $max)
+    };
+    ($var:expr) => {
+        $var
+    };
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -164,5 +232,14 @@ mod test {
         assert!(format.check("test test test").is_ok());
         assert!(format.check("test test test test").is_err());
         assert!(format.check("").is_err());
+    }
+
+    #[test]
+    fn test_empty_format() {
+        let format = Format::new("", ExpectedSize::Fixed);
+        assert_eq!(format.token, "");
+        assert_eq!(format.size, Size::Fixed(0));
+        assert!(format.check("").is_ok());
+        assert!(format.check("test").is_err());
     }
 }

@@ -1,4 +1,9 @@
-use crate::{ExpectedLine, FileData, FoundLine};
+mod found_line;
+pub use found_line::FoundLine;
+mod parsed_line;
+pub use parsed_line::ParsedLine;
+
+use crate::{ExpectedLine, FileData};
 
 use ansi::abbrev::{B, D, Y};
 use hmerr::{pfe, Result};

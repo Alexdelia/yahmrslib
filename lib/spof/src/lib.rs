@@ -1,14 +1,14 @@
 mod file_data;
 pub use file_data::FileData;
-mod expected_line;
-pub use expected_line::ExpectedLine;
-mod keyword;
-pub use keyword::Keyword;
-mod format;
-pub use format::{ExpectedSize, Format};
-mod occurence;
-pub use occurence::Occurence;
-mod get_line;
-pub use get_line::get_line;
-mod parsed_line;
-pub use parsed_line::{FoundLine, ParsedLine};
+
+mod rule;
+pub use rule::{
+    expected_line::ExpectedLine,
+    format::{ExpectedSize, Format},
+    keyword::Keyword,
+    occurence::Occurence,
+    Rule,
+};
+
+mod line;
+pub use line::{get_line, FoundLine, ParsedLine};
