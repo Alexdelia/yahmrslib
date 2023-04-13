@@ -1,3 +1,5 @@
+#![cfg(feature = "gen")]
+
 use ansi::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
 
 /*
