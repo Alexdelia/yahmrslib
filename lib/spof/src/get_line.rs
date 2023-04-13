@@ -1,10 +1,10 @@
-use crate::{ExpectedLine, FileData, ParsedLine};
+use crate::{ExpectedLine, FileData, FoundLine};
 
 use ansi::abbrev::{B, D, Y};
 use hmerr::{pfe, Result};
 
-pub fn get_line(f: &FileData, el: ExpectedLine) -> Result<Vec<ParsedLine>> {
-    let mut ret: Vec<ParsedLine> = Vec::new();
+pub fn get_line(f: &FileData, el: ExpectedLine) -> Result<FoundLine> {
+    let mut ret = FoundLine::new();
 
     for i in 0..f.diluted.len() {
         if f.diluted[i].starts_with(&el.k.keyword) {

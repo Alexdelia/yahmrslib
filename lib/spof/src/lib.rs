@@ -11,4 +11,4 @@ pub use occurence::Occurence;
 mod get_line;
 pub use get_line::get_line;
 mod parsed_line;
-pub use parsed_line::ParsedLine;
+pub use parsed_line::{FoundLine, ParsedLine};
