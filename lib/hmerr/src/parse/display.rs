@@ -156,7 +156,14 @@ pub fn w_help(
     help: &Option<String>,
 ) -> std::fmt::Result {
     if let Some(help) = help {
-        write!(f, "\n{padding}{HELP_SIGN}{HELP}{help}")
+        write!(
+            f,
+            "\n{padding}{HELP_SIGN}{HELP}{help}",
+            help = help.replace(
+                '\n',
+                format!("\n{padding}{}", " ".repeat(HELP_SIGN.len() + HELP.len())).as_str()
+            )
+        )
     } else {
         write!(f, "\n{padding}{HELP_SIGN}")
     }
