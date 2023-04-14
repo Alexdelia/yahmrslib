@@ -1,3 +1,6 @@
+mod parse;
+pub use parse::spof;
+
 mod file_data;
 pub use file_data::FileData;
 

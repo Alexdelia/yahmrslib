@@ -3,7 +3,7 @@ pub mod format;
 pub mod keyword;
 pub mod occurence;
 
-use crate::ExpectedLine;
+use crate::{ExpectedLine, Keyword};
 
 use std::collections::HashMap;
 
@@ -20,6 +20,10 @@ impl Rule {
 
     pub fn get(&self, keyword: &str) -> Option<&ExpectedLine> {
         self.0.get(keyword)
+    }
+
+    pub fn keywords(&self) -> Vec<&Keyword> {
+        self.0.values().map(|el| &el.k).collect()
     }
 }
 
