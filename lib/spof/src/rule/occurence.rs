@@ -2,7 +2,7 @@ use std::fmt::{Debug, Display};
 
 use ansi::abbrev::{B, D, G, I, R};
 
-#[derive(Default)]
+#[derive(Default, PartialEq, Clone, Copy)]
 pub enum Occurence {
     #[default]
     Once, // 1
@@ -67,7 +67,7 @@ impl Occurence {
 /// # Example
 ///
 /// ```
-/// use crate::Occurence;
+/// use spof::{Occurence, occurence};
 ///
 /// let occ = occurence!(Once);
 /// assert_eq!(occ, Occurence::Once);
@@ -81,14 +81,20 @@ impl Occurence {
 /// let occ = occurence!(OneOrMore);
 /// assert_eq!(occ, Occurence::OneOrMore);
 ///
+/// let occ = occurence!(n:42);
+/// assert_eq!(occ, Occurence::Exactly(42));
+///
 /// let occ = occurence!(42);
+/// assert_eq!(occ, Occurence::Exactly(42));
+///
+/// let occ = occurence!((42));
 /// assert_eq!(occ, Occurence::Exactly(42));
 ///
 /// let occ = occurence!(1, 42);
 /// assert_eq!(occ, Occurence::Range(1, 42));
 ///
 /// let n = 42;
-/// let occ = occurence!(n);
+/// let occ = occurence!(n:n);
 /// assert_eq!(occ, Occurence::Exactly(n));
 ///
 /// let min = 1;
@@ -110,22 +116,31 @@ impl Occurence {
 #[macro_export]
 macro_rules! occurence {
     (Once) => {
-        Occurence::Once
+        $crate::Occurence::Once
     };
     (Optional) => {
-        Occurence::Optional
+        $crate::Occurence::Optional
     };
     (ZeroOrMore) => {
-        Occurence::ZeroOrMore
+        $crate::Occurence::ZeroOrMore
     };
     (OneOrMore) => {
-        Occurence::OneOrMore
+        $crate::Occurence::OneOrMore
     };
-    ($n:expr) => {
-        Occurence::Exactly($n)
+    (n:$n:expr) => {
+        $crate::Occurence::Exactly($n)
+    };
+    ( ($n:expr) ) => {
+        $crate::Occurence::Exactly($n)
+    };
+    ($n:literal) => {
+        $crate::Occurence::Exactly($n)
     };
     ($min:expr, $max:expr) => {
-        Occurence::Range($min, $max)
+        $crate::Occurence::Range($min, $max)
+    };
+    ( ($min:expr, $max:expr) ) => {
+        $crate::Occurence::Range($min, $max)
     };
     ($occ:expr) => {
         $occ

@@ -1,4 +1,4 @@
-use std::fmt::{Display, Formatter};
+use std::fmt::{Debug, Display, Formatter};
 
 pub struct Format {
     pub token: String,
@@ -11,7 +11,7 @@ pub enum Size {
     Range(usize, usize), // expected_size >= min && expected_size <= max
 }
 
-#[derive(Default)]
+#[derive(Default, Debug, Clone, Copy, PartialEq)]
 pub enum ExpectedSize {
     #[default]
     Fixed,
@@ -53,6 +53,16 @@ impl Display for Size {
     }
 }
 
+impl Debug for Size {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Fixed(expected_size) => write!(f, "Fixed({})", expected_size),
+            Self::Undefined => write!(f, "Undefined"),
+            Self::Range(min, max) => write!(f, "Range({}, {})", min, max),
+        }
+    }
+}
+
 impl Size {
     fn in_range(&self, size: usize) -> bool {
         match self {
@@ -76,7 +86,7 @@ impl Size {
 /// # Example
 ///
 /// ```
-/// use crate::ExpectedSize;
+/// use spof::{ExpectedSize, expected_size};
 ///
 /// let es = expected_size!(Fixed);
 /// assert_eq!(es, ExpectedSize::Fixed);
@@ -107,10 +117,6 @@ impl Size {
 /// let es = expected_size!(min, max);
 /// assert_eq!(es, ExpectedSize::Range(1, 3));
 ///
-/// let r = (1, 3);
-/// let es = expected_size!(r);
-/// assert_eq!(es, ExpectedSize::Range(1, 3));
-///
 /// let es = expected_size!(ExpectedSize::Fixed);
 /// assert_eq!(es, ExpectedSize::Fixed);
 ///
@@ -123,16 +129,16 @@ impl Size {
 #[macro_export]
 macro_rules! expected_size {
     (Fixed) => {
-        ExpectedSize::Fixed
+        $crate::ExpectedSize::Fixed
     };
     (Undefined) => {
-        ExpectedSize::Undefined
+        $crate::ExpectedSize::Undefined
     };
     ($min:expr, $max:expr) => {
-        ExpectedSize::Range($min, $max)
+        $crate::ExpectedSize::Range($min, $max)
     };
-    (($min:expr, $max:expr)) => {
-        ExpectedSize::Range($min, $max)
+    ( ($min:expr, $max:expr) ) => {
+        $crate::ExpectedSize::Range($min, $max)
     };
     ($var:expr) => {
         $var
@@ -181,16 +187,6 @@ mod test {
                     a_min == b_min && a_max == b_max
                 }
                 _ => false,
-            }
-        }
-    }
-
-    impl std::fmt::Debug for Size {
-        fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-            match self {
-                Self::Fixed(expected_size) => write!(f, "Fixed({})", expected_size),
-                Self::Undefined => write!(f, "Undefined"),
-                Self::Range(min, max) => write!(f, "Range({}, {})", min, max),
             }
         }
     }

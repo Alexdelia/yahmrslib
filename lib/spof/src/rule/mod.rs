@@ -46,12 +46,12 @@ impl Default for Rule {
 /// # Example
 ///
 /// ```
-/// use crate::{rule, Rule, FileData};
+/// use spof::{rule, Rule};
 ///
 /// let r: Rule = rule!(
 ///    ("color", "R G B", Fixed, Once, "the color of the object"),
 ///    ("position", "X Y Z [W]", (3, 4), Once, "the position of the object"), // don't need '[', ']' in format to be optional
-///    ("name", "string", OneOrMore, Optional, "the name of the object")
+///    ("name", "string", Undefined, Optional, "the name of the object"),
 /// );
 ///
 /// /* valid file:
@@ -70,17 +70,17 @@ impl Default for Rule {
 /// ```
 #[macro_export]
 macro_rules! rule {
-	($($k:expr, $f:expr, $s:expr, $o:expr, $d:expr),*) => {
-		{
+	( $( ($k:expr, $f:expr, $s:tt, $o:tt, $d:expr) ),* $(,)? ) => {
+        {
 			let mut r = $crate::Rule::new();
-			$(
-				r.add($crate::ExpectedLine::new(
-					$crate::Keyword::new($k, $d),
-					$crate::Format::new($f, $crate::expected_size!( $s )),
-					$crate::occurence!( $o )
-				));
-			)*
-			r
-		}
-	};
+            $(
+                r.add($crate::ExpectedLine::new(
+                    $crate::Keyword::new($k, $d),
+                    $crate::Format::new($f, $crate::expected_size!($s)),
+                    $crate::occurence!($o),
+                ));
+            )*
+            r
+        }
+    };
 }
