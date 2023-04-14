@@ -1,9 +1,6 @@
 mod parse;
 pub use parse::spof;
 
-mod file_data;
-pub use file_data::FileData;
-
 mod rule;
 pub use rule::{
     expected_line::ExpectedLine,
@@ -14,4 +11,4 @@ pub use rule::{
 };
 
 mod line;
-pub use line::{get_line, FoundLine, ParsedLine};
+pub use line::{FoundLine, ParsedLine};

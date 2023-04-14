@@ -1,5 +1,4 @@
-use super::{Format, Keyword, Occurence};
-use crate::FileData;
+use crate::{Format, Keyword, Occurence};
 
 use ansi::abbrev::{B, D, G, M, R, Y};
 use hmerr::{pfe, ple, pwe, Result};
@@ -19,19 +18,26 @@ impl ExpectedLine {
         }
     }
 
-    pub fn check(&self, f: &FileData, line_index: usize) -> Result<Vec<String>> {
-        let binding = f.diluted[line_index].replacen(&self.k.keyword, "", 1);
-        let line = binding.trim();
-        match self.format.check(line) {
-            Ok(v) => Ok(v),
-            Err((expected, got)) => pfe!(
-                format!("expected {B}{G}{expected}{D} token after {B}{Y}{keyword}{D}, got {B}{R}{got}{D}",
-                    keyword=self.k.keyword,
-                ),
-                h:self.help(),
-                f:f.name.clone(),
-                l:ple!(line, i:line_index, w:pwe!((0, line.len())))
-            )?,
+    pub fn check(
+        &self,
+        file_name: &str,
+        line: String,
+        token: &Vec<String>,
+        line_index: usize,
+    ) -> Result<()> {
+        match self.format.check(token) {
+            Ok(_) => Ok(()),
+            Err((expected, got)) => {
+                let line_len = line.len();
+                pfe!(
+                    format!("expected {B}{G}{expected}{D} token after {B}{Y}{keyword}{D}, got {B}{R}{got}{D}",
+                        keyword=self.k.keyword,
+                    ),
+                    h:self.help(),
+                    f:file_name,
+                    l:ple!(line, i:line_index, w:pwe!((0, line_len)))
+                )?
+            }
         }
     }
 
@@ -62,12 +68,21 @@ mod test {
             "keyword format".to_string(),
             "keyword format wrong".to_string(),
         ];
-        let f = FileData {
-            name: "file name".to_string(),
-            content: content.clone(),
-            diluted: content,
-        };
-        assert!(el.check(&f, 0).is_ok());
-        assert!(el.check(&f, 1).is_err());
+
+        let mut split: Vec<String> = content[0]
+            .split_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let _keyword = split.remove(0);
+        assert!(el.check("file_name", content[0].clone(), &split, 0).is_ok());
+
+        let mut split: Vec<String> = content[1]
+            .split_whitespace()
+            .map(|s| s.to_string())
+            .collect();
+        let _keyword = split.remove(0);
+        assert!(el
+            .check("file_name", content[1].clone(), &split, 1)
+            .is_err());
     }
 }

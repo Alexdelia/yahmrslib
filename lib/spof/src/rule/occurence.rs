@@ -107,6 +107,7 @@ impl Occurence {
 ///    assert_eq!(occ, occurence!(occ));
 /// }
 /// ```
+#[macro_export]
 macro_rules! occurence {
     (Once) => {
         Occurence::Once

@@ -27,6 +27,12 @@ impl Rule {
     }
 }
 
+impl Default for Rule {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 /// create file rule
 ///
 /// # Arguments
@@ -44,7 +50,7 @@ impl Rule {
 ///
 /// let r: Rule = rule!(
 ///    ("color", "R G B", Fixed, Once, "the color of the object"),
-///    ("position", "X Y Z [W]", (3, 4), Once, "the position of the object"),	// don't need '[', ']' in format to be optional
+///    ("position", "X Y Z [W]", (3, 4), Once, "the position of the object"), // don't need '[', ']' in format to be optional
 ///    ("name", "string", OneOrMore, Optional, "the name of the object")
 /// );
 ///

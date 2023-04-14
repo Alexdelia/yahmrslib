@@ -32,3 +32,9 @@ impl FoundLine {
             .take(0)
     }
 }
+
+impl Default for FoundLine {
+    fn default() -> Self {
+        Self::new()
+    }
+}
