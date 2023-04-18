@@ -20,6 +20,18 @@ impl FoundLine {
         self.0.is_empty()
     }
 
+    pub fn get_once(&self) -> &ParsedLine {
+        self.0.get(0).expect("FoundLine is empty")
+    }
+
+    pub fn get_first_token(&self) -> &String {
+        self.0
+            .get(0)
+            .expect("FoundLine is empty")
+            .get(0)
+            .expect("FoundLine is empty")
+    }
+
     pub fn take_once(self) -> ParsedLine {
         self.0.into_iter().next().expect("FoundLine is empty")
     }

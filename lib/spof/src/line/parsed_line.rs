@@ -12,6 +12,10 @@ impl ParsedLine {
         Self(token, line_index)
     }
 
+    pub fn get(&self, index: usize) -> Option<&String> {
+        self.0.get(index)
+    }
+
     pub fn take(self, index: usize) -> String {
         self.0
             .into_iter()
