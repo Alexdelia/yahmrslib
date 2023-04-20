@@ -24,6 +24,8 @@ impl ParsedLine {
             .nth(index)
             .expect("token index out of range")
     }
+
+	pub fn parse_token(&self, f: impl Fn(&str)
 }
 
 impl From<(Vec<String>, usize)> for ParsedLine {

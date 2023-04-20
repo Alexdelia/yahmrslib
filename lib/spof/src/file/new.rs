@@ -1,3 +1,4 @@
+use super::SpofedFile;
 use crate::{ExpectedLine, FoundLine, ParsedLine, Rule};
 
 use ansi::abbrev::{B, D, G, Y};
@@ -6,29 +7,27 @@ use hmerr::{pfe, ple, pwe, Result};
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::path::Path;
+use std::path::PathBuf;
 
-pub fn spof(
-    path: impl AsRef<Path>,
-    comment: Option<&str>,
-    rule: Rule,
-) -> Result<HashMap<String, FoundLine>> {
-    let path = path.as_ref();
-    let name = path.to_string_lossy().to_string();
+impl SpofedFile {
+    pub fn new(path: impl Into<PathBuf>, comment: Option<&str>, rule: Rule) -> Result<Self> {
+        let path: PathBuf = path.into();
+        let name = path.to_string_lossy().to_string();
 
-    let reader = BufReader::new(File::open(path)?);
+        let reader = BufReader::new(File::open(&path)?);
 
-    let mut ret = HashMap::new();
+        let mut data = HashMap::new();
 
-    for (i, line) in reader.lines().enumerate() {
-        let line = line?;
-        if let Some((keyword, pl)) = parse(&name, comment, &rule, line, i)? {
-            let fl = ret.entry(keyword).or_insert_with(FoundLine::new);
-            fl.push(pl);
+        for (i, line) in reader.lines().enumerate() {
+            let line = line?;
+            if let Some((keyword, pl)) = parse(&name, comment, &rule, line, i)? {
+                let fl = data.entry(keyword).or_insert_with(FoundLine::new);
+                fl.push(pl);
+            }
         }
-    }
 
-    Ok(ret)
+        Ok(Self { path, data })
+    }
 }
 
 fn parse(

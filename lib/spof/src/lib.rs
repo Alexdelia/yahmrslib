@@ -1,5 +1,5 @@
-mod parse;
-pub use parse::spof;
+mod file;
+pub use file::{FileData, SpofedFile};
 
 mod rule;
 pub use rule::{
