@@ -1,5 +1,7 @@
 use super::ParsedLine;
 
+use std::str::FromStr;
+
 #[derive(Debug, Clone, PartialEq)]
 pub struct FoundLine(pub Vec<ParsedLine>);
 
@@ -42,6 +44,13 @@ impl FoundLine {
             .next()
             .expect("FoundLine is empty")
             .take(0)
+    }
+
+    pub fn parse<T>(&self) -> Result<Vec<Vec<T>>, T::Err>
+    where
+        T: FromStr,
+    {
+        self.0.iter().map(|pl| pl.parse::<T>()).collect()
     }
 }
 

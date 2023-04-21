@@ -1,5 +1,7 @@
 use hmerr::parse::{Line, Wrong};
 
+use std::str::FromStr;
+
 /// ```text
 /// (
 ///    Vec<String>, // the tokens of the line
@@ -25,7 +27,12 @@ impl ParsedLine {
             .expect("token index out of range")
     }
 
-	pub fn parse_token(&self, f: impl Fn(&str)
+    pub fn parse<T>(&self) -> Result<Vec<T>, T::Err>
+    where
+        T: FromStr,
+    {
+        self.0.iter().map(|s| s.parse::<T>()).collect()
+    }
 }
 
 impl From<(Vec<String>, usize)> for ParsedLine {
