@@ -1,5 +1,7 @@
 use super::ParsedLine;
 
+use hmerr::parse::Line;
+
 use std::str::FromStr;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -46,7 +48,7 @@ impl FoundLine {
             .take(0)
     }
 
-    pub fn parse<T>(&self) -> Result<Vec<Vec<T>>, T::Err>
+    pub fn parse<T>(&self) -> Result<Vec<Vec<T>>, (Line, T::Err)>
     where
         T: FromStr,
     {

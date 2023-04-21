@@ -27,11 +27,14 @@ impl ParsedLine {
             .expect("token index out of range")
     }
 
-    pub fn parse<T>(&self) -> Result<Vec<T>, T::Err>
+    pub fn parse<T>(&self) -> Result<Vec<T>, (Line, T::Err)>
     where
         T: FromStr,
     {
-        self.0.iter().map(|s| s.parse::<T>()).collect()
+        self.0
+            .iter()
+            .map(|s| s.parse::<T>().map_err(|e| (self.clone().into(), e)))
+            .collect()
     }
 }
 

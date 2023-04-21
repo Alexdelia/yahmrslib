@@ -26,7 +26,7 @@ impl SpofedFile {
             }
         }
 
-        Ok(Self { path, data })
+        Ok(Self { path, data, rule })
     }
 }
 
