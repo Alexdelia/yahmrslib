@@ -1,49 +1,40 @@
-use super::{FileData, SpofedFile};
-use crate::{ExpectedLine, FoundLine, ParsedLine, Rule};
+use super::{FileData, FileDataKey, SpofedFile};
+use crate::ParsedLine;
 
 use ansi::abbrev::{B, D, G, Y};
 use hmerr::{pfe, ple, pwe, Result};
 
-use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 
-impl<K> SpofedFile<K> {
-    pub fn new(path: impl Into<PathBuf>, comment: Option<&str>, rule: Rule) -> Result<Self> {
+impl<K: FileDataKey> SpofedFile<K> {
+    pub fn new(path: impl Into<PathBuf>, comment: Option<&str>, rule: FileData<K>) -> Result<Self> {
         let path: PathBuf = path.into();
         let name = path.to_string_lossy().to_string();
 
         let reader = BufReader::new(File::open(&path)?);
 
-        // create hashmap with all keywords from rule
-        let mut data: FileData<K> = HashMap::from_iter(
-            rule.keywords()
-                .iter()
-                .map(|k| (k.keyword.clone(), FoundLine::new())),
-        );
-
-        let mut data = HashMap::new();
+        let mut data = rule;
 
         for (i, line) in reader.lines().enumerate() {
             let line = line?;
-            if let Some((keyword, pl)) = parse(&name, comment, &rule, line, i)? {
-                let fl = data.entry(keyword).or_insert_with(FoundLine::new);
-                fl.push(pl);
+            if let Some((key, pl)) = parse(&name, comment, &data, line, i)? {
+                data[key].data.push(pl);
             }
         }
 
-        Ok(Self { path, data, rule })
+        Ok(Self { path, data })
     }
 }
 
-fn parse(
+fn parse<K: FileDataKey>(
     name: &str,
     comment: Option<&str>,
-    rule: &Rule,
+    rule: &FileData<K>,
     line: String,
     i: usize,
-) -> Result<Option<(String, ParsedLine)>> {
+) -> Result<Option<(K, ParsedLine)>> {
     let diluted = pre_parse(line.clone(), comment);
     let mut split: Vec<String> = diluted.split_whitespace().map(|s| s.to_string()).collect();
 
@@ -52,8 +43,30 @@ fn parse(
     }
 
     let keyword = split.remove(0);
-    let el = get_expected_line(name, rule, &line, &keyword, i)?;
-    el.check(name, line, &split, i)?;
+    let Ok(keyword) = keyword.parse::<K>() else {
+        pfe!(
+            format!("unsupported keyword {B}{Y}{keyword}{D}"),
+            h: format!(
+                "no rule for keyword {B}{Y}{keyword}{D}
+here is a list of valid keyword:
+{keyword_list}",
+                keyword_list = rule
+                    .keywords()
+                    .into_iter()
+                    .map(|k| format!(
+                        "\t- {B}{G}{keyword}{D}: {B}{desc}{D}",
+                        keyword = k.keyword,
+                        desc = k.desc
+                    ))
+                    .collect::<Vec<String>>()
+                    .join("\n")
+            ),
+            f: name,
+            l: ple!(line.clone(), i: i, w: pwe!(keyword.clone())),
+        )?
+    };
+
+    rule[keyword].rule.check(name, line, &split, i)?;
 
     Ok(Some((keyword, ParsedLine::new(split, i))))
 }
@@ -69,38 +82,6 @@ fn pre_parse(line: String, comment: Option<&str>) -> String {
     }
 
     line.trim().to_string()
-}
-
-fn get_expected_line<'r>(
-    name: &str,
-    rule: &'r Rule,
-    line: &str,
-    keyword: &str,
-    i: usize,
-) -> Result<&'r ExpectedLine> {
-    match rule.get(keyword) {
-        Some(el) => Ok(el),
-        None => pfe!(
-            format!("unsupported keyword {B}{Y}{keyword}{D}"),
-            h: format!(
-                "no rule for keyword {B}{Y}{keyword}{D}
-here is a list of valid keyword:
-{keywords}",
-                keywords = rule
-                    .keywords()
-                    .into_iter()
-                    .map(|k| format!(
-                        "\t- {B}{G}{keyword}{D}: {B}{desc}{D}",
-                        keyword = k.keyword,
-                        desc = k.desc
-                    ))
-                    .collect::<Vec<String>>()
-                    .join("\n")
-            ),
-            f: name,
-            l: ple!(line, i: i, w: pwe!(keyword))
-        )?,
-    }
 }
 
 #[cfg(test)]

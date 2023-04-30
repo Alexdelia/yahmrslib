@@ -7,9 +7,6 @@ pub struct KeyData {
 
 impl KeyData {
     pub fn new(data: FoundLine, rule: ExpectedLine) -> Self {
-        Self {
-            data: FoundLine::new(),
-            rule,
-        }
+        Self { data, rule }
     }
 }
