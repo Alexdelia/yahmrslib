@@ -33,6 +33,17 @@ impl Default for Rule {
     }
 }
 
+macro_rules! count_ident {
+	($($idents:ident),* $(,)*) => {
+        {
+            #[allow(dead_code, non_camel_case_types)]
+            enum Idents { $($idents,)* __CountIdentsLast }
+            const COUNT: usize = Idents::__CountIdentsLast as usize;
+            COUNT
+        }
+    };
+}
+
 /// create file rule
 ///
 /// # Arguments
@@ -70,17 +81,32 @@ impl Default for Rule {
 /// ```
 #[macro_export]
 macro_rules! rule {
-	( $( ($k:expr, $f:expr, $s:tt, $o:tt, $d:expr) ),* $(,)? ) => {
-        {
-			let mut r = $crate::Rule::new();
-            $(
-                r.add($crate::ExpectedLine::new(
-                    $crate::Keyword::new($k, $d),
-                    $crate::Format::new($f, $crate::expected_size!($s)),
-                    $crate::occurence!($o),
-                ));
-            )*
-            r
-        }
-    };
+	( enum Rule$enum_name { $( ($key_enum:ident => $k:expr, $f:expr, $s:tt, $o:tt, $d:expr) ),* $(,)? } ) => {
+		#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+		enum Rule$enum_name {
+			$($key_enum,)*
+			__CountIdentLast,
+		}
+
+		impl std::ops::Index<Rule$enum_name> for $crate::FileData<count_ident!($($key_enum),*)> {
+			type Output = $crate::KeyData;
+
+			fn index(&self, index: Rule$enum_name) -> &Self::Output {
+				&self[index as usize]
+			}
+		}
+
+		{
+			[$(
+				$crate::KeyData::new(
+					$crate::FoundLine::new(),
+					$crate::ExpectedLine::new(
+						$crate::Keyword::new($k, $d),
+						$crate::Format::new($f, $crate::expected_size!($s)),
+						$crate::occurence!($o),
+					),
+				),
+			)*]
+		}
+	};
 }

@@ -1,21 +1,26 @@
+mod key_data;
 mod new;
 mod parse_token;
+pub use key_data::KeyData;
 
-use crate::{FoundLine, Rule};
+use crate::{ExpectedLine, FoundLine, Rule};
 
 use std::collections::HashMap;
 use std::path::PathBuf;
 
-pub type FileData = HashMap<String, FoundLine>;
+pub type FileData<S> = [KeyData; S];
 
-pub struct SpofedFile {
+pub struct SpofedFile<D> {
     pub path: PathBuf,
-    pub data: FileData,
-    pub rule: Rule,
+    pub data: D,
 }
 
-impl SpofedFile {
-    pub fn get(&self, key: &str) -> Option<&FoundLine> {
-        self.data.get(key)
+impl<K> SpofedFile<K> {
+    pub fn name(&self) -> String {
+        self.path.to_string_lossy().to_string()
+    }
+
+    pub fn get(&self, key: K) -> &FoundLine {
+        self.data.get(key).unwrap().data // should never panic because HashMap is populated with all keys from Rule
     }
 }

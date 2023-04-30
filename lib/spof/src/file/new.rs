@@ -1,4 +1,4 @@
-use super::SpofedFile;
+use super::{FileData, SpofedFile};
 use crate::{ExpectedLine, FoundLine, ParsedLine, Rule};
 
 use ansi::abbrev::{B, D, G, Y};
@@ -9,12 +9,19 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
 
-impl SpofedFile {
+impl<K> SpofedFile<K> {
     pub fn new(path: impl Into<PathBuf>, comment: Option<&str>, rule: Rule) -> Result<Self> {
         let path: PathBuf = path.into();
         let name = path.to_string_lossy().to_string();
 
         let reader = BufReader::new(File::open(&path)?);
+
+        // create hashmap with all keywords from rule
+        let mut data: FileData<K> = HashMap::from_iter(
+            rule.keywords()
+                .iter()
+                .map(|k| (k.keyword.clone(), FoundLine::new())),
+        );
 
         let mut data = HashMap::new();
 
