@@ -62,7 +62,7 @@ here is a list of valid keyword:
                     .join("\n")
             ),
             f: name,
-            l: ple!(line.clone(), i: i, w: pwe!(keyword.clone())),
+            l: ple!(line, i: i, w: pwe!(keyword.clone())),
         )?
     };
 
