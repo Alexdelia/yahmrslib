@@ -109,7 +109,7 @@ macro_rules! rule {
 		impl ::std::str::FromStr for $enum_name {
 			type Err = ();
 
-			fn from_str(s: &str) -> Result<Self, Self::Err> {
+			fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
 				match s {
 					$( $k => Ok($enum_name::$key_enum), )*
 					_ => Err(()),
