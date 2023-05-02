@@ -69,9 +69,9 @@ impl<K: FileDataKey> IndexMut<K> for SpofedFile<K> {
 ///
 /// rule!(
 ///     enum RuleTest {
-///         (Color => "color", "R G B", Fixed, Once, "the color of the object"),
-///         (Position => "position", "X Y Z [W]", (3, 4), Once, "the position of the object"), // don't need '[', ']' in format to be optional
-///         (Name => "name", "string", Undefined, Optional, "the name of the object"),
+///         Color => "color", "R G B", Fixed, Once, "the color of the object",
+///         Position => "position", "X Y Z [W]", (3, 4), Once, "the position of the object", // don't need '[', ']' in format to be optional
+///         Name => "name", "string", Undefined, Optional, "the name of the object",
 ///     }
 /// );
 ///
@@ -94,7 +94,7 @@ impl<K: FileDataKey> IndexMut<K> for SpofedFile<K> {
 /// ```
 #[macro_export]
 macro_rules! rule {
-	( enum $enum_name:ident { $( ($key_enum:ident => $k:expr, $f:expr, $s:tt, $o:tt, $d:expr) ),* $(,)? } ) => {
+	( enum $enum_name:ident { $( $key_enum:ident => $k:expr, $f:expr, $s:tt, $o:tt, $d:expr ),* $(,)? } ) => {
 		#[derive(Debug, Clone, Copy, PartialEq, Eq)]
 		enum $enum_name {
 			$( $key_enum ),*
