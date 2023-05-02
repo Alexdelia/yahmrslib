@@ -94,9 +94,9 @@ impl<K: FileDataKey> IndexMut<K> for SpofedFile<K> {
 /// ```
 #[macro_export]
 macro_rules! rule {
-	( enum $enum_name:ident { $( $key_enum:ident => $k:expr, $f:expr, $s:tt, $o:tt, $d:expr ),* $(,)? } ) => {
+	( $p:vis enum $enum_name:ident { $( $key_enum:ident => $k:expr, $f:expr, $s:tt, $o:tt, $d:expr ),* $(,)? } ) => {
 		#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-		enum $enum_name {
+		$p enum $enum_name {
 			$( $key_enum ),*
 		}
 
