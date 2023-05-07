@@ -4,6 +4,6 @@ pub use num_arr::NumArr;
 mod sign;
 pub use sign::{Sign, Signed, Unsigned};
 
-mod ops;
-
+mod eq;
 mod from;
+mod ops;
