@@ -2,6 +2,7 @@
 members = [
 	"lib/ansi",
 	"lib/hmerr",
+	"lib/sna",
 	"lib/ux",
 	"lib/spof",
 ]
