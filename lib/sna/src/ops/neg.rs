@@ -51,7 +51,6 @@ impl Neg for &NumArr<Signed> {
     }
 }
 
-/*
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -68,4 +67,3 @@ mod tests {
         assert_eq!(-ina, NumArr::<Signed>::from(0));
     }
 }
-*/
