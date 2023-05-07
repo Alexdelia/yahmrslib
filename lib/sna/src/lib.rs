@@ -6,4 +6,5 @@ pub use sign::{Sign, Signed, Unsigned};
 
 mod eq;
 mod from;
+mod num_traits;
 mod ops;

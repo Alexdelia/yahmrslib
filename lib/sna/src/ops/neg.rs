@@ -5,7 +5,7 @@ use std::ops::Neg;
 impl Neg for Sign {
     type Output = Self;
 
-    /// Negate a Sign
+    /// negate a Sign
     #[inline]
     fn neg(self) -> Self::Output {
         match self {
@@ -18,7 +18,7 @@ impl Neg for Sign {
 impl Neg for Signed {
     type Output = Self;
 
-    /// Negate a Signed
+    /// negate a Signed
     #[inline]
     fn neg(self) -> Self::Output {
         match self.0 {
@@ -31,7 +31,7 @@ impl Neg for Signed {
 impl Neg for NumArr<Signed> {
     type Output = Self;
 
-    /// Negate a NumArr<Signed>
+    /// negate a NumArr<Signed>
     #[inline]
     fn neg(self) -> Self::Output {
         NumArr {
@@ -44,7 +44,7 @@ impl Neg for NumArr<Signed> {
 impl Neg for &NumArr<Signed> {
     type Output = NumArr<Signed>;
 
-    /// Negate a &NumArr<Signed>
+    /// negate a &NumArr<Signed>
     #[inline]
     fn neg(self) -> Self::Output {
         -self.clone()

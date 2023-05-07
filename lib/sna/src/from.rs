@@ -1,16 +1,10 @@
+use crate::num_arr::Digit;
 use crate::{NumArr, Sign, Signed, Unsigned};
 
 macro_rules! impl_from_i_to_signed {
 	($($t:ty)*) => ($(
 		impl From<$t> for NumArr<Signed> {
 			fn from(n: $t) -> Self {
-				if n == 0 {
-					return NumArr {
-						arr: vec![0],
-						sign: Signed(Sign::Pos),
-					};
-				}
-
 				let mut arr = Vec::new();
 				let mut n = n;
 				let mut sign = Sign::Pos;
@@ -21,7 +15,7 @@ macro_rules! impl_from_i_to_signed {
 				}
 
 				while n > 0 {
-					arr.push((n % 10) as u8);
+					arr.push((n % 10) as Digit);
 					n /= 10;
 				}
 
@@ -38,18 +32,11 @@ macro_rules! impl_from_u_to_signed {
 	($($t:ty)*) => ($(
 		impl From<$t> for NumArr<Signed> {
 			fn from(n: $t) -> Self {
-				if n == 0 {
-					return NumArr {
-						arr: vec![0],
-						sign: Signed(Sign::Pos),
-					};
-				}
-
 				let mut arr = Vec::new();
 				let mut n = n;
 
 				while n > 0 {
-					arr.push((n % 10) as u8);
+					arr.push((n % 10) as Digit);
 					n /= 10;
 				}
 
@@ -66,18 +53,11 @@ macro_rules! impl_from_u_to_unsigned {
 	($($t:ty)*) => ($(
 		impl From<$t> for NumArr<Unsigned> {
 			fn from(n: $t) -> Self {
-				if n == 0 {
-					return NumArr {
-						arr: vec![0],
-						sign: Unsigned,
-					};
-				}
-
 				let mut arr = Vec::new();
 				let mut n = n;
 
 				while n > 0 {
-					arr.push((n % 10) as u8);
+					arr.push((n % 10) as Digit);
 					n /= 10;
 				}
 

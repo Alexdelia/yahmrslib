@@ -1,13 +1,16 @@
 use crate::sign::{Signed, Unsigned};
 
+pub type Digit = u8;
+pub type DigitArr = Vec<Digit>;
+
 #[derive(Debug, Default, Clone)]
 pub struct NumArr<S> {
-    pub arr: Vec<u8>,
+    pub arr: DigitArr,
     pub sign: S,
 }
 
 impl NumArr<Unsigned> {
-    /// Create a new NumArr<Unsigned>
+    /// create a new NumArr<Unsigned>
     #[inline]
     pub fn new() -> Self {
         NumArr::default()
@@ -15,7 +18,7 @@ impl NumArr<Unsigned> {
 }
 
 impl NumArr<Signed> {
-    /// Create a new NumArr<Signed>
+    /// create a new NumArr<Signed>
     #[inline]
     pub fn new() -> Self {
         NumArr::default()

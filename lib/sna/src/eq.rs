@@ -1,13 +1,11 @@
-use crate::{NumArr, Signed, Unsigned};
+use crate::{NumArr, Sign, Signed, Unsigned};
 
 impl Eq for NumArr<Signed> {}
 
 impl PartialEq for NumArr<Signed> {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
-        (self.sign == other.sign && self.arr == other.arr)
-            || ((self.arr.is_empty() || self.arr == [0])
-                && (other.arr.is_empty() || other.arr == [0]))
+        (self.sign == other.sign && self.arr == other.arr) || (self.is_zero() && other.is_zero())
     }
 }
 
@@ -17,6 +15,22 @@ impl PartialEq for NumArr<Unsigned> {
     #[inline]
     fn eq(&self, other: &Self) -> bool {
         self.arr == other.arr
+    }
+}
+
+impl PartialEq<NumArr<Signed>> for NumArr<Unsigned> {
+    #[inline]
+    fn eq(&self, other: &NumArr<Signed>) -> bool {
+        (other.sign == Signed(Sign::Pos) && self.arr == other.arr)
+            || (self.is_zero() && other.is_zero())
+    }
+}
+
+impl PartialEq<NumArr<Unsigned>> for NumArr<Signed> {
+    #[inline]
+    fn eq(&self, other: &NumArr<Unsigned>) -> bool {
+        (self.sign == Signed(Sign::Pos) && self.arr == other.arr)
+            || (self.is_zero() && other.is_zero())
     }
 }
 
@@ -37,7 +51,7 @@ mod tests {
         assert_ne!(ina1, ina3);
         assert_ne!(ina1, ina4);
         assert_ne!(ina3, ina4);
-        assert_eq!(ina0.arr, [0]);
+        assert_eq!(ina0.arr, []);
         assert_eq!(ina0.sign, Signed(Sign::Pos));
     }
 
@@ -50,6 +64,6 @@ mod tests {
 
         assert_eq!(una1, una2);
         assert_ne!(una1, una3);
-        assert_eq!(una0.arr, [0]);
+        assert_eq!(una0.arr, []);
     }
 }
