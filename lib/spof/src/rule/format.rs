@@ -1,5 +1,6 @@
 use std::fmt::{Debug, Display, Formatter};
 
+#[derive(Debug)]
 pub struct Format {
     pub token: String,
     size: Size,

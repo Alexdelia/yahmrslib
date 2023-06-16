@@ -3,6 +3,7 @@ use crate::{Format, Keyword, Occurence};
 use ansi::abbrev::{B, D, G, M, R, Y};
 use hmerr::{pfe, ple, pwe, Result};
 
+#[derive(Debug)]
 pub struct ExpectedLine {
     pub k: Keyword,
     pub format: Format,

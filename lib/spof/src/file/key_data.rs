@@ -1,5 +1,6 @@
 use crate::{ExpectedLine, FoundLine};
 
+#[derive(Debug)]
 pub struct KeyData {
     pub data: FoundLine,
     pub rule: ExpectedLine,

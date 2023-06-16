@@ -10,6 +10,7 @@ use ansi::abbrev::{B, D, R, Y};
 use std::path::PathBuf;
 use std::str::FromStr;
 
+#[derive(Debug)]
 pub struct SpofedFile<K: FileDataKey> {
     pub path: PathBuf,
     data: FileData<K>,

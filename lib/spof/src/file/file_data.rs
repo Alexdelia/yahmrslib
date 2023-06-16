@@ -10,6 +10,7 @@ pub trait FileDataKey: Into<usize> + FromStr + Clone + Copy {
     fn build() -> FileData<Self>;
 }
 
+#[derive(Debug)]
 pub struct FileData<K: FileDataKey>(Vec<KeyData>, PhantomData<K>);
 
 impl<K: FileDataKey> FileData<K> {
