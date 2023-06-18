@@ -17,15 +17,17 @@ impl<K: FileDataKey> std::fmt::Debug for FileData<K> {
         let mut s = String::new();
 
         for k in self.0.iter() {
-            s.push_str(&format!("{key}\n", key = k.rule.k.keyword));
+            s.push_str(&format!("├{key}\n", key = k.rule.k.keyword));
 
             for f in &k.data.0 {
                 s.push_str(&format!(
-                    "{l:>4} | {token}\n",
+                    "{l:>5}│ {token}\n",
                     l = f.1,
                     token = f.0.join(" ")
                 ));
             }
+
+            s.push_str("     ┆\n");
         }
 
         write!(f, "{s}")
