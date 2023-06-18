@@ -24,6 +24,14 @@ impl FoundLine {
         self.0.is_empty()
     }
 
+    pub fn once(&self) -> Option<&ParsedLine> {
+        self.0.get(0)
+    }
+
+    pub fn first_token(&self) -> Option<&String> {
+        self.0.get(0).and_then(|pl| pl.get(0))
+    }
+
     pub fn get_once(&self) -> &ParsedLine {
         self.0.get(0).expect("FoundLine is empty")
     }
