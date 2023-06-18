@@ -19,10 +19,10 @@ impl<K: FileDataKey> std::fmt::Debug for SpofedFile<K> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         write!(
             f,
-            "SpofedFile\n ╞═{path}\n{data:?}",
+            "SpofedFile\n    ╞═{path}\n{data:?}",
             path = self.path.to_string_lossy(),
             data = self.data
-        )?;
+        )
     }
 }
 
