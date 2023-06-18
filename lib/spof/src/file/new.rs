@@ -47,9 +47,7 @@ fn parse<K: FileDataKey>(
         pfe!(
             format!("unsupported keyword {B}{Y}{keyword}{D}"),
             h: format!(
-                "no rule for keyword {B}{Y}{keyword}{D}
-here is a list of valid keyword:
-{keyword_list}",
+                "no rule for keyword {B}{Y}{keyword}{D}\nhere is a list of valid keyword:\n{keyword_list}",
                 keyword_list = rule
                     .keywords()
                     .into_iter()
