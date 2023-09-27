@@ -112,6 +112,7 @@ impl<T> IVec<T> {
     /// assert_eq!(ivec.next(), &-21);
     /// assert_eq!(ivec.next(), &0);
     /// ```
+    #[allow(clippy::should_implement_trait)]
     #[inline]
     pub fn next(&mut self) -> &T {
         self.plus_i(1);
