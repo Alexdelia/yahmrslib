@@ -53,8 +53,8 @@ pub fn w_file(
     index: &Option<usize>,
 ) -> std::fmt::Result {
     let Some(file) = file else {
-		return write!(f, "\n{padding}{FILE_SIGN}");
-	};
+        return write!(f, "\n{padding}{FILE_SIGN}");
+    };
 
     let index: String = if let Some(index) = index {
         format!("\x1b[0m{SIDE}:\x1b[0m{FILE_COLOR}{index}")
@@ -72,8 +72,8 @@ pub fn w_line(
     source: bool,
 ) -> std::fmt::Result {
     let Some(line) = line else {
-		return Ok(());
-	};
+        return Ok(());
+    };
 
     writeln!(f, "\n{padding}{SIDE_PADDING_SIGN}")?;
 

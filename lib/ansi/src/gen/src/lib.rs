@@ -12,11 +12,17 @@ impl syn::parse::Parse for RGBInput {
     fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
         fn parse_u8(input: syn::parse::ParseStream, comma: bool) -> syn::Result<u8> {
             let Ok(lit) = input.parse::<syn::LitInt>() else {
-				return Err(syn::Error::new_spanned(input.to_string(), "expected integer literal"));
-			};
+                return Err(syn::Error::new_spanned(
+                    input.to_string(),
+                    "expected integer literal",
+                ));
+            };
             let Ok(val) = lit.base10_parse::<u8>() else {
-				return Err(syn::Error::new_spanned(lit, "expected u8 literal (0..=255)"));
-			};
+                return Err(syn::Error::new_spanned(
+                    lit,
+                    "expected u8 literal (0..=255)",
+                ));
+            };
 
             if comma && input.parse::<syn::Token![,]>().is_err() {
                 return Err(syn::Error::new_spanned(
