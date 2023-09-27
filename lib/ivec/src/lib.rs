@@ -6,23 +6,33 @@ pub struct IVec<T> {
     pub i: usize,
 }
 
+impl Default for IVec<usize> {
+    fn default() -> Self {
+        IVec::new()
+    }
+}
+
 impl<T> IVec<T> {
-    /// create a new IVec from a vector
+    /// construct a new, empty `IVec<T>`
     ///
     /// # Example
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::new();
+    ///
+    /// ivec.vec.push(0);
+    /// ivec.vec.push(42);
+    /// ivec.vec.push(-21);
     ///
     /// assert_eq!(ivec.get(), &0);
     /// assert_eq!(ivec.next(), &42);
     /// assert_eq!(ivec.prev(), &0);
     /// assert_eq!(ivec.to(2), &-21);
     /// ```
-    pub fn new(vec: impl Into<Vec<T>>) -> Self {
+    pub fn new() -> Self {
         IVec {
-            vec: vec.into(),
+            vec: Vec::new(),
             i: 0,
         }
     }
@@ -48,7 +58,7 @@ impl<T> IVec<T> {
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::from(vec![0, 42, -21]);
     ///
     /// assert_eq!(ivec.get(), &0);
     /// ivec.next();
@@ -69,7 +79,7 @@ impl<T> IVec<T> {
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::from(vec![0, 42, -21]);
     ///
     /// assert_eq!(ivec.get(), &0);
     /// *ivec.get_mut() = 84;
@@ -87,7 +97,7 @@ impl<T> IVec<T> {
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::from(vec![0, 42, -21]);
     ///
     /// assert_eq!(ivec.get(), &0);
     /// ivec.set(84);
@@ -105,7 +115,7 @@ impl<T> IVec<T> {
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::from(vec![0, 42, -21]);
     ///
     /// assert_eq!(ivec.get(), &0);
     /// assert_eq!(ivec.next(), &42);
@@ -125,7 +135,7 @@ impl<T> IVec<T> {
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::from(vec![0, 42, -21]);
     ///
     /// assert_eq!(ivec.get(), &0);
     /// assert_eq!(ivec.prev(), &-21);
@@ -144,7 +154,7 @@ impl<T> IVec<T> {
     /// ```
     /// use ivec::IVec;
     ///
-    /// let mut ivec = IVec::new(vec![0, 42, -21]);
+    /// let mut ivec = IVec::from(vec![0, 42, -21]);
     ///
     /// assert_eq!(ivec.to(0), &0);
     /// assert_eq!(ivec.to(1), &42);
