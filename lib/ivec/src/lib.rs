@@ -154,7 +154,7 @@ impl<T> IVec<T> {
     /// ```
     #[inline]
     pub fn to(&mut self, i: usize) -> &T {
-        self.set_i(i.into());
+        self.set_i(i);
         &self.vec[self.i]
     }
 }

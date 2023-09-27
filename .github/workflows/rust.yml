@@ -22,7 +22,7 @@ jobs:
             { name: "check", cmd: "check --all-features" },
             { name: "test", cmd: "test --all-features" },
             { name: "doc", cmd: "doc --all-features" },
-            { name: "clippy", cmd: "clippy --all-features" },
+            { name: "clippy", cmd: "clippy --all-features -- -D warnings" },
             { name: "fmt", cmd: "fmt --check" },
           ]
 
