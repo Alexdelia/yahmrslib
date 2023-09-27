@@ -153,7 +153,7 @@ impl<T> IVec<T> {
     /// assert_eq!(ivec.to(5), &-21);
     /// ```
     #[inline]
-    pub fn to(&mut self, i: impl Into<usize>) -> &T {
+    pub fn to(&mut self, i: usize) -> &T {
         self.set_i(i.into());
         &self.vec[self.i]
     }
