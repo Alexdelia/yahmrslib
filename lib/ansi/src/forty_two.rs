@@ -1,9 +1,9 @@
-const COLOR_42: &str = crate::hex!(#04809f);
-const COLOR_42_INTRA: &str = crate::hex!(#00babc);
+pub const COLOR_42: &str = "\x1b[38;2;4;128;159m";
+pub const COLOR_42_INTRA: &str = "\x1b[38;2;0;186;188m";
 
-const COLOR_THE_ORDER: &str = crate::hex!(#FF6950);
+pub const COLOR_THE_ORDER: &str = "\x1b[38;2;255;105;80m";
 
-const ASCII_42: &str =
+pub const ASCII_42: &str =
     "                              &@@@@@@@@@@@@@      @@@@@@@@@@@@@%@@@@@@@@@@@@@#
                            .@@@@@@@@@@@@@/        @@@@@@@@@@@   @@@@@@@@@@@@@#
                          &@@@@@@@@@@@@@           @@@@@@@@%     @@@@@@@@@@@@@#
@@ -26,7 +26,7 @@ const ASCII_42: &str =
                               /@@@@@@@@@@@@@
                               /@@@@@@@@@@@@@";
 
-const ASCII_COLORED_THE_ORDER: &str =
+pub const ASCII_COLORED_THE_ORDER: &str =
 "                              \x1b[38;5;203m..*((((((((((((((/..
                        .*((((((((((((((((((((((((((((((/.
                   .*((((((((((((((((((((((((((((((((((((((((/.

@@ -10,7 +10,7 @@ default = ["abbrev"]
 abbrev = []
 remove = ["dep:ansi-regex"]
 gen = ["dep:gen", "dep:const_format"]
-forty_two = ["dep:gen", "dep:const_format"]
+forty_two = []
 
 
 [dependencies]
