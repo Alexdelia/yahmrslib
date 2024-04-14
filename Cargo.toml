@@ -1,8 +1,2 @@
 [workspace]
-members = [
-	"lib/ansi",
-	"lib/hmerr",
-	"lib/sna",
-	"lib/ux",
-	"lib/spof",
-]
+members = ["lib/ansi", "lib/ivec", "lib/hmerr", "lib/sna", "lib/ux", "lib/spof"]

@@ -20,13 +20,10 @@ pub fn padding<E>(source: &Option<E>, n: Option<usize>) -> String {
 }
 
 fn n_to_padding(n: Option<usize>) -> String {
-    match n {
-        Some(n) => {
-            let n = n.to_string();
-            let n = if n.len() == 1 { " " } else { "" };
-            format!("{n} ")
-        }
-        None => " ".to_string(),
+    if let Some(n) = n {
+        " ".repeat(n.to_string().len() + 1)
+    } else {
+        String::from(" ")
     }
 }
 

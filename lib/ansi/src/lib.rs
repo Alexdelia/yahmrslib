@@ -9,6 +9,11 @@ mod remove;
 #[cfg(feature = "remove")]
 pub use remove::remove;
 
+// #[cfg(feature = "forty_two")]
+mod forty_two;
+#[cfg(feature = "forty_two")]
+pub use forty_two::{ASCII_42, ASCII_COLORED_THE_ORDER, COLOR_42, COLOR_42_INTRA, COLOR_THE_ORDER};
+
 pub const RESET: &str = "\x1b[0m";
 
 pub const CLEAR: &str = "\x1b[H\x1b[2J";
