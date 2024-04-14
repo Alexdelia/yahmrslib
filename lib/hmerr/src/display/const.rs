@@ -16,31 +16,3 @@ pub const LINT_COLOR: &str = "\x1b[0m\x1b[1;38;2;255;0;64m";
 pub const LINT_SIGN: char = '^';
 
 pub const FILE_SOURCE: &str = "\x1b[0m\x1b[2;3mgenerated in: \x1b[1m";
-
-#[macro_export]
-macro_rules! err {
-	($($arg:tt)*) => {
-		eprintln!("{}{}", $crate::display::ERROR, format!($($arg)*));
-	};
-}
-
-#[macro_export]
-macro_rules! errnl {
-	($($arg:tt)*) => {
-		eprint!("{}{}", $crate::display::ERROR, format!($($arg)*));
-	};
-}
-
-#[macro_export]
-macro_rules! warn {
-	($($arg:tt)*) => {
-		eprintln!("{}{}", $crate::display::WARNING, format!($($arg)*));
-	};
-}
-
-#[macro_export]
-macro_rules! warnnl {
-	($($arg:tt)*) => {
-		eprint!("{}{}", $crate::display::WARNING, format!($($arg)*));
-	};
-}
