@@ -1,8 +1,7 @@
 use std::fmt::Display;
 
 use crate::display::{
-    ERROR, FILE_COLOR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, LINT_COLOR, LINT_SIGN, SIDE,
-    SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE, SOURCE_SIDE_SIGN,
+    ERROR, FILE_COLOR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, SIDE, SOURCE, SOURCE_SIDE_SIGN,
 };
 
 pub fn error(f: &mut std::fmt::Formatter<'_>, error: &impl Display) -> std::fmt::Result {

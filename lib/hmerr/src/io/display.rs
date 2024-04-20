@@ -1,8 +1,7 @@
 use super::IoError;
 
 use crate::display::{
-    write, ERROR, FILE_COLOR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, LINT_COLOR, LINT_SIGN, SIDE,
-    SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE, SOURCE_SIDE_SIGN,
+    write,
 };
 
 use std::fmt::{Debug, Display};

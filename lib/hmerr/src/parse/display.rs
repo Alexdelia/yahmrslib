@@ -1,8 +1,8 @@
 use super::{Line, ParseFileError, Wrong};
 
 use crate::display::{
-    write, ERROR, FILE_COLOR, FILE_SIGN, FILE_SOURCE, HELP, HELP_SIGN, LINT_COLOR, LINT_SIGN, SIDE,
-    SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE, SOURCE_SIDE_SIGN,
+    write, LINT_COLOR, LINT_SIGN, SIDE,
+    SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN,
 };
 
 use std::fmt::{Debug, Display};
