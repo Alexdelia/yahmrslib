@@ -9,7 +9,7 @@ fn display_error(error: &io::Error, file: &str) -> String {
 	// TODO: handle more error
 	match error.kind() {
 		io::ErrorKind::NotFound => format!("\x1b[1;35m{file}\x1b[1;31mnot found\x1b[0m"),
-		_ => error.to_string(),
+		_ => format!("{kind} {error}", kind=error.kind()),
 	}
 }
 
