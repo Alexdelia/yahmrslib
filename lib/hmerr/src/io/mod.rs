@@ -72,7 +72,7 @@ macro_rules! ioe {
 	(@some_or_none) => { None };
 	(@some_or_none $entity:expr) => { Some($entity) };
     ($file:expr, $error:expr $(, h:$help:expr)? $(, s:$source:expr)?$(,)?) => {
-		#[allow(clippy::needless_update)] $crate::io::IoError {
+		$crate::io::IoError {
 			file: $file.into(),
 			error: $error.into(),
 			help: ioe!(@some_or_none $($help.into())?),
