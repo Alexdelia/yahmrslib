@@ -41,28 +41,28 @@ impl Error for IoError {
 /// const FILE_PATH: &str = "i_do_not_exist.txt";
 ///
 /// fn some_main() -> Result<()> {
-/// 	let mut file = File::open(FILE_PATH).map_err(
-/// 		|e| {
-/// 			ioe!(
-/// 				FILE_PATH,	// file path
-/// 				e,			// io::error
-/// 							// no help message
-/// 							// no source error (this error was not caused by another one)
-/// 			)
-/// 		}
-/// 	)?;
+///     let mut file = File::open(FILE_PATH).map_err(
+///         |e| {
+///             ioe!(
+///                 FILE_PATH, // file path
+///                 e,         // io::error
+///                            // no help message
+///                            // no source error (this error was not caused by another one)
+///             )
+///         }
+///     )?;
 /// 
-/// 	let mut content = String::new();
-/// 	file.read_to_string(&mut content).map_err(
-/// 		|e| {
-/// 			ioe!(
-/// 				FILE_PATH,							// file path
-/// 				e,									// io::error
-/// 				h:"make sure the file is readable",	// optional help message
-/// 													// no source error (this error was not caused by another one)
-///				)
-/// 		}
-/// 	)?;
+///     let mut content = String::new();
+///     file.read_to_string(&mut content).map_err(
+///         |e| {
+///             ioe!(
+///                 FILE_PATH,                          // file path
+///                 e,                                  // io::error
+///                 h:"make sure the file is readable", // optional help message
+///                                                     // no source error (this error was not caused by another one)
+///             )
+///         }
+///     )?;
 /// 
 ///     Ok(())
 /// }
