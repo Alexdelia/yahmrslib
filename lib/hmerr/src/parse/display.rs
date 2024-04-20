@@ -11,18 +11,18 @@ use std::ops::Range;
 impl Display for ParseFileError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let index = self.line.as_ref().and_then(|l| l.index);
-        let padding = write::padding(&self.source, index);
+        let padding = write::padding(self.source.as_ref(), index);
 
         write::error(f, &self.error)?;
         if !(self.line.is_none() && self.file.is_none()) {
-            write::file(f, &padding, self.file.as_deref(), &index)?;
+            write::file(f, &padding, self.file.as_deref(), index)?;
         }
-        w_line(f, &padding, &self.line, self.source.is_some())?;
+        w_line(f, &padding, self.line.as_ref(), self.source.is_some())?;
         if !(self.line.is_none() && self.file.is_none() && self.help.is_none()) {
-            write::help(f, &padding, &self.help)?;
+            write::help(f, &padding, self.help.as_deref())?;
         }
         write::source_file(f, &padding, self.source_file.as_deref())?;
-        write::source(f, &self.source)?;
+        write::source(f, self.source.as_ref())?;
 
         Ok(())
     }
@@ -37,7 +37,7 @@ impl Debug for ParseFileError {
 pub fn w_line(
     f: &mut std::fmt::Formatter<'_>,
     padding: &str,
-    line: &Option<Line>,
+    line: Option<&Line>,
     source: bool,
 ) -> std::fmt::Result {
     let Some(line) = line else {
