@@ -89,7 +89,7 @@ impl Line {
 /// * `l:line` - line (can be generated with `ple!`) |optional|
 /// * `s:source` - source error |optional|
 ///
-/// optional don't need to define (don't even need `None`)
+/// optional don't need to be defined (don't even need `None`)
 ///
 /// but they must be in order (for now)
 ///
@@ -159,7 +159,7 @@ macro_rules! pfe {
 /// * `i:index` - index of the line         |optional|
 /// * `w:wrong` - wrong part of the line    |optional|
 ///
-/// optional don't need to define (don't even need `None`)
+/// optional don't need to be defined (don't even need `None`)
 ///
 /// but they must be in order (for now)
 ///
