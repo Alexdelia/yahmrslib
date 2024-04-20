@@ -69,14 +69,15 @@ impl Error for IoError {
 /// ```
 #[macro_export]
 macro_rules! ioe {
+	(@some_or_none) => { None };
+	(@some_or_none $entity:expr) => { Some($entity) };
     ($file:expr, $error:expr $(, h:$help:expr)? $(, s:$source:expr)?$(,)?) => {
-		Err(#[allow(clippy::needless_update)] $crate::parse::IoError {
-			file: $file.into()
+		#[allow(clippy::needless_update)] $crate::io::IoError {
+			file: $file.into(),
 			error: $error.into(),
-			$(help: Some($help.into()),)?
+			help: ioe!(@some_or_none $($help.into())?),
 			source_file: Some(file!().to_string()),
-			$(source: Some(Box::new($source)),)?
-			..Default::default()
-		})
+			source: ioe!(@some_or_none $(Box::new($source))?),
+		}
     };
 }
