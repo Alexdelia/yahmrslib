@@ -4,6 +4,10 @@ pub const HELP: &str = "\x1b[0m\x1b[36mhelp\x1b[0m\x1b[1m:\x1b[0m ";
 pub const SIDE: &str = "\x1b[0m\x1b[1;34m";
 pub const SOURCE: &str = "\x1b[0m\x1b[1;31m╰╴caused by╶╮\x1b[0m\n";
 
+pub const EXPECTED: &str = "\x1b[0m\t\x1b[2mexpected:\x1b[0m \x1b[1;32m";
+pub const GOT: &str = "\x1b[0m\t\x1b[2mgot:\x1b[0m      \x1b[1;31m";
+pub const EMPTY_STR: &str = "\x1b[2mnothing\x1b[0m";
+
 pub const FILE_COLOR: &str = "\x1b[0m\x1b[38;2;161;211;255m";
 
 pub const FILE_SIGN: &str = "\x1b[0m\x1b[1;34m╭╴◊\x1b[0m ";
