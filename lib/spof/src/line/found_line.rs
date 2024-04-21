@@ -37,7 +37,8 @@ impl FoundLine {
     }
 
     pub fn get_first_token(&self) -> &String {
-        self.0.first()
+        self.0
+            .first()
             .expect("FoundLine is empty")
             .get(0)
             .expect("FoundLine is empty")
