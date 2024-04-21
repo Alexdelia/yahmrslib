@@ -1,5 +1,5 @@
 #[cfg(feature = "gen")]
-pub use ::const_format::formatcp as __formatcp;
+pub use const_format::formatcp as __formatcp;
 
 #[cfg(feature = "gen")]
 pub use gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};

@@ -35,7 +35,7 @@ impl Error for IoError {
 /// ```
 /// use std::fs::File;
 /// use std::io::prelude::*;
-/// 
+///
 /// use hmerr::{Result, ioe};
 ///
 /// const FILE_PATH: &str = "i_do_not_exist.txt";
@@ -51,7 +51,7 @@ impl Error for IoError {
 ///             )
 ///         }
 ///     )?;
-/// 
+///
 ///     let mut content = String::new();
 ///     file.read_to_string(&mut content).map_err(
 ///         |e| {
@@ -63,7 +63,7 @@ impl Error for IoError {
 ///             )
 ///         }
 ///     )?;
-/// 
+///
 ///     Ok(())
 /// }
 /// ```

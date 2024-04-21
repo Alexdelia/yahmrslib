@@ -1,8 +1,7 @@
 use super::{Line, ParseFileError, Wrong};
 
 use crate::display::{
-    write, LINT_COLOR, LINT_SIGN, SIDE,
-    SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN,
+    write, LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN,
 };
 
 use std::fmt::{Debug, Display};
@@ -92,6 +91,10 @@ fn construct_range(wrong: &Vec<Wrong>, line: &str) -> Vec<Range<usize>> {
                 r.push(*start..*start + *end);
             }
             Wrong::Str(s) => {
+                if s.is_empty() {
+                    continue;
+                }
+
                 let mut start = 0;
                 while let Some(i) = line[start..].find(s) {
                     start += i;
