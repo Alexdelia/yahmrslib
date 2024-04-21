@@ -110,6 +110,10 @@ fn construct_range(wrong: &Vec<Wrong>, line: &str) -> Vec<Range<usize>> {
 }
 
 fn simplifly(r: &mut Vec<Range<usize>>) {
+    if r.is_empty() {
+        return;
+    }
+
     r.sort_by(|a, b| a.start.cmp(&b.start));
     let mut i = 0;
     while i < r.len() - 1 {
