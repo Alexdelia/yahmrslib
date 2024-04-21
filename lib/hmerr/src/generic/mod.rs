@@ -35,26 +35,26 @@ impl Error for GenericError {
 /// use hmerr::{Result, ge};
 ///
 /// fn some_main() -> Result<()> {
-///     let n = match env::args().nth(1) {
-/// 	   None => {
-/// 		   return Err(ge!(
-/// 			   "no argument given",         // error message
-/// 			   h:"please provide a number", // help message
-/// 										    // no source error (this error was not caused by another one)
-/// 		   ))?;
-/// 	   }
-/// 	   Some(n) => n.parse::<i32>().map_err(
-/// 		   |e| {
-/// 			   ge!(
-/// 				   "could not parse number",	   // error message
-/// 				   h:"please provide a valid i32", // help message
-/// 		       	   s:e,                            // source error
-/// 			   )
-/// 		   }
-/// 	   )?,
-/// 	};
+///        let n = match env::args().nth(1) {
+///        None => {
+///            return Err(ge!(
+///                "no argument given",          // error message
+///                 h:"please provide a number", // help message
+///                                              // no source error (this error was not caused by another one)
+///            ))?;
+///        }
+///        Some(n) => n.parse::<i32>().map_err(
+///            |e| {
+///                ge!(
+///                    "could not parse number",       // error message
+///                    h:"please provide a valid i32", // help message
+///                    s:e,                            // source error
+///                )
+///            }
+///        )?,
+///     };
 ///
-/// 	// do something with n
+///     // do something with n
 ///
 ///     Ok(())
 /// }
