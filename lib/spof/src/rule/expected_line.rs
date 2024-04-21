@@ -19,11 +19,11 @@ impl ExpectedLine {
         }
     }
 
-    pub fn check(
+    pub fn check<T>(
         &self,
         file_name: &str,
         line: String,
-        token: &Vec<String>,
+        token: &[T],
         line_index: usize,
     ) -> Result<()> {
         match self.format.check(token) {

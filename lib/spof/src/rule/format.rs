@@ -39,7 +39,7 @@ impl Format {
         Self { token, size }
     }
 
-    pub fn check(&self, token: &Vec<String>) -> std::result::Result<(), (String, usize)> {
+    pub fn check<T>(&self, token: &[T]) -> std::result::Result<(), (String, usize)> {
         self.size.check(token.len())
     }
 }
@@ -198,7 +198,7 @@ mod test {
         let format = Format::new("test", ExpectedSize::Fixed);
         assert_eq!(format.token, "test");
         assert_eq!(format.size, Size::Fixed(1));
-        assert!(format.check(&vec![]).is_err());
+        assert!(format.check::<String>(&vec![]).is_err());
         assert!(format.check(&vec![token.clone()]).is_ok());
         assert!(format.check(&vec![token.clone(); 2]).is_err());
         assert!(format.check(&vec![token.clone(); 3]).is_err());
@@ -206,7 +206,7 @@ mod test {
         let format = Format::new("test test", ExpectedSize::Fixed);
         assert_eq!(format.token, "test test");
         assert_eq!(format.size, Size::Fixed(2));
-        assert!(format.check(&vec![]).is_err());
+        assert!(format.check::<String>(&vec![]).is_err());
         assert!(format.check(&vec![token.clone()]).is_err());
         assert!(format.check(&vec![token.clone(); 2]).is_ok());
         assert!(format.check(&vec![token; 3]).is_err());
@@ -218,7 +218,7 @@ mod test {
         let format = Format::new("test", ExpectedSize::Undefined);
         assert_eq!(format.token, "test");
         assert_eq!(format.size, Size::Undefined);
-        assert!(format.check(&vec![]).is_ok());
+        assert!(format.check::<String>(&vec![]).is_ok());
         assert!(format.check(&vec![token.clone()]).is_ok());
         assert!(format.check(&vec![token.clone(); 2]).is_ok());
         assert!(format.check(&vec![token; 3]).is_ok());
@@ -230,7 +230,7 @@ mod test {
         let format = Format::new("test", ExpectedSize::Range(1, 3));
         assert_eq!(format.token, "test");
         assert_eq!(format.size, Size::Range(1, 3));
-        assert!(format.check(&vec![]).is_err());
+        assert!(format.check::<String>(&vec![]).is_err());
         assert!(format.check(&vec![token.clone()]).is_ok());
         assert!(format.check(&vec![token.clone(); 2]).is_ok());
         assert!(format.check(&vec![token.clone(); 3]).is_ok());
@@ -243,7 +243,7 @@ mod test {
         let format = Format::new("", ExpectedSize::Fixed);
         assert_eq!(format.token, "");
         assert_eq!(format.size, Size::Fixed(0));
-        assert!(format.check(&vec![]).is_ok());
+        assert!(format.check::<String>(&vec![]).is_ok());
         assert!(format.check(&vec![token.clone()]).is_err());
         assert!(format.check(&vec![token.clone(); 2]).is_err());
         assert!(format.check(&vec![token; 3]).is_err());

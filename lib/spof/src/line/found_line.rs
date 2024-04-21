@@ -25,20 +25,19 @@ impl FoundLine {
     }
 
     pub fn once(&self) -> Option<&ParsedLine> {
-        self.0.get(0)
+        self.0.first()
     }
 
     pub fn first_token(&self) -> Option<&String> {
-        self.0.get(0).and_then(|pl| pl.get(0))
+        self.0.first().and_then(|pl| pl.get(0))
     }
 
     pub fn get_once(&self) -> &ParsedLine {
-        self.0.get(0).expect("FoundLine is empty")
+        self.0.first().expect("FoundLine is empty")
     }
 
     pub fn get_first_token(&self) -> &String {
-        self.0
-            .get(0)
+        self.0.first()
             .expect("FoundLine is empty")
             .get(0)
             .expect("FoundLine is empty")
