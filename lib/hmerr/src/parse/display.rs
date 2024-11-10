@@ -55,7 +55,7 @@ pub fn w_line(
 		writeln!(f, "{padding}{SIDE_SIGN}{content}")?;
 	}
 
-	w_lint(f, padding, &line.line.replace("\t", "    "), &line.wrong)?;
+	w_lint(f, padding, &line.line, &line.wrong)?;
 
 	write!(f, "{padding}{SIDE_PADDING_SIGN}")
 }

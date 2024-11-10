@@ -21,5 +21,5 @@ pub const LINT_SIGN: char = '^';
 
 pub const FILE_SOURCE: &str = "\x1b[0m\x1b[2;3mgenerated in: \x1b[1m";
 
-pub const TAB: &str = "\x1b[0m\x1b[1;2;35m├──┤\x1b[0m";
-pub const SPACE: &str = "\x1b[0m\x1b[1;2;36m·\x1b[0m";
+pub const TAB: &str = "\x1b[0m\x1b[2;35m-\x1b[0m";
+pub const SPACE: &str = "\x1b[0m\x1b[2;36m·\x1b[0m";
