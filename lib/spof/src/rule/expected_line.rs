@@ -1,4 +1,4 @@
-use crate::{Format, Keyword, Occurence};
+use crate::{Format, Keyword, Occurrence};
 
 use ansi::abbrev::{B, D, G, M, R, Y};
 use hmerr::{pfe, ple, pwe, Result};
@@ -7,15 +7,15 @@ use hmerr::{pfe, ple, pwe, Result};
 pub struct ExpectedLine {
     pub k: Keyword,
     pub format: Format,
-    pub occurence: Occurence,
+    pub occurrence: Occurrence,
 }
 
 impl ExpectedLine {
-    pub fn new(k: Keyword, format: Format, occurence: Occurence) -> Self {
+    pub fn new(k: Keyword, format: Format, occurrence: Occurrence) -> Self {
         Self {
             k,
             format,
-            occurence,
+            occurrence,
         }
     }
 
@@ -63,7 +63,7 @@ mod test {
         let el = ExpectedLine::new(
             Keyword::new("keyword", "desc"),
             Format::new("format", ExpectedSize::Fixed),
-            Occurence::OneOrMore,
+            Occurrence::OneOrMore,
         );
         let content = vec![
             "keyword format".to_string(),

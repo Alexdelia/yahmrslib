@@ -126,7 +126,7 @@ fn ask_question(
 fn ask_keys(ch: char, key: &[AskKey]) -> std::io::Result<()> {
     let b = String::from("\x1b[1m");
 
-    let mut s = String::from("wating for ");
+    let mut s = String::from("waiting for ");
     for AskKey {
         key,
         alt,

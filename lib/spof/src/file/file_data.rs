@@ -81,7 +81,7 @@ impl<K: FileDataKey> IndexMut<K> for SpofedFile<K> {
 /// * `k:literal` - keyword string
 /// * `f:expr` - expected format string
 /// * `s:tt` - expected format token size
-/// * `o:tt` - expected line occurence
+/// * `o:tt` - expected line occurrence
 /// * `d:expr` - keyword description
 ///
 /// # Example
@@ -148,7 +148,7 @@ macro_rules! rule {
 							$crate::ExpectedLine::new(
 								$crate::Keyword::new($k, $d),
 								$crate::Format::new($f, $crate::expected_size!($s)),
-								$crate::occurence!($o),
+								$crate::occurrence!($o),
 							),
 						),
 					)*
@@ -161,7 +161,7 @@ macro_rules! rule {
 #[cfg(test)]
 mod test {
     use super::*;
-    use crate::{ExpectedLine, ExpectedSize, Format, FoundLine, Keyword, Occurence};
+    use crate::{ExpectedLine, ExpectedSize, Format, FoundLine, Keyword, Occurrence};
     use std::path::PathBuf;
 
     #[derive(Clone, Copy)]
@@ -196,7 +196,7 @@ mod test {
                     ExpectedLine::new(
                         Keyword::new("Zero", "the zero"),
                         Format::new("0", ExpectedSize::Fixed),
-                        Occurence::Once,
+                        Occurrence::Once,
                     ),
                 ),
                 KeyData::new(
@@ -204,7 +204,7 @@ mod test {
                     ExpectedLine::new(
                         Keyword::new("One", "the one"),
                         Format::new("1", ExpectedSize::Fixed),
-                        Occurence::Once,
+                        Occurrence::Once,
                     ),
                 ),
             ])
@@ -244,7 +244,7 @@ mod test {
                     ExpectedLine::new(
                         Keyword::new("Zero", "the zero"),
                         Format::new("0", ExpectedSize::Fixed),
-                        Occurence::Once,
+                        Occurrence::Once,
                     ),
                 ),
                 KeyData::new(
@@ -252,7 +252,7 @@ mod test {
                     ExpectedLine::new(
                         Keyword::new("One", "the one"),
                         Format::new("1", ExpectedSize::Fixed),
-                        Occurence::Once,
+                        Occurrence::Once,
                     ),
                 ),
             ])

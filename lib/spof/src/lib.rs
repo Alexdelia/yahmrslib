@@ -6,7 +6,7 @@ pub use rule::{
     expected_line::ExpectedLine,
     format::{ExpectedSize, Format},
     keyword::Keyword,
-    occurence::Occurence,
+    occurrence::Occurrence,
 };
 
 mod line;
