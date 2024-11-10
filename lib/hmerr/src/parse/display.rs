@@ -1,7 +1,7 @@
 use super::{Line, ParseFileError, Wrong};
 
 use crate::display::{
-	write, LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN,
+	write, LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN, SPACE, TAB,
 };
 
 use std::fmt::{Debug, Display};
@@ -42,6 +42,7 @@ pub fn w_line(
 	let Some(line) = line else {
 		return Ok(());
 	};
+	let content = line.line.replace("\t", TAB).replace(" ", SPACE);
 
 	writeln!(f, "\n{padding}{SIDE_PADDING_SIGN}")?;
 
@@ -49,9 +50,9 @@ pub fn w_line(
 		if source {
 			write!(f, "{SOURCE_SIDE_SIGN}")?;
 		}
-		writeln!(f, "{SIDE}{index} {SIDE_SIGN}{}", line.line)?;
+		writeln!(f, "{SIDE}{index} {SIDE_SIGN}{content}")?;
 	} else {
-		writeln!(f, "{padding}{SIDE_SIGN}{}", line.line)?;
+		writeln!(f, "{padding}{SIDE_SIGN}{content}")?;
 	}
 
 	w_lint(f, padding, &line.line, &line.wrong)?;
