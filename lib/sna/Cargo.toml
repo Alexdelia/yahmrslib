@@ -1,9 +1,0 @@
-[package]
-name = "sna"
-version = "0.1.0"
-edition = "2021"
-authors = ["Alexdelia"]
-description = "Simple Num Array, a simple BigInt-like library center on ease of use and base10 indexing"
-
-[dependencies]
-num-traits = "0.2.15"

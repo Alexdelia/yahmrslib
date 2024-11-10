@@ -16,7 +16,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        lib: ["ansi", "ivec", "hmerr", "sna", "ux", "spof"]
+        lib: ["ansi", "ivec", "hmerr", "ux", "spof"]
         test:
           [
             { name: "check", arg: "--all-features" },
