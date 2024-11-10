@@ -11,43 +11,43 @@ use std::path::PathBuf;
 use std::str::FromStr;
 
 pub struct SpofedFile<K: FileDataKey> {
-    pub path: PathBuf,
-    data: FileData<K>,
+	pub path: PathBuf,
+	data: FileData<K>,
 }
 
 impl<K: FileDataKey> std::fmt::Debug for SpofedFile<K> {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(
-            f,
-            "SpofedFile\n     ╞═{path}\n{data:?}",
-            path = self.path.to_string_lossy(),
-            data = self.data
-        )
-    }
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+		write!(
+			f,
+			"SpofedFile\n     ╞═{path}\n{data:?}",
+			path = self.path.to_string_lossy(),
+			data = self.data
+		)
+	}
 }
 
 impl<K: FileDataKey> SpofedFile<K> {
-    pub fn name(&self) -> String {
-        self.path.to_string_lossy().to_string()
-    }
+	pub fn name(&self) -> String {
+		self.path.to_string_lossy().to_string()
+	}
 
-    pub fn parse<T>(&self, k: K) -> Result<Vec<Vec<T>>, Box<ParseFileError>>
-    where
-        T: FromStr,
-    {
-        Ok(self[k].data.parse::<T>().map_err(|(l, _)| {
-            ParseFileError::new(
-                format!(
-                    "could not parse {B}{Y}{keyword}{D} as {B}{R}{t}{D}",
-                    keyword = self[k].rule.k.keyword,
-                    t = std::any::type_name::<T>(),
-                ),
-                self.name(),
-                Some(l),
-                self[k].rule.help(),
-                Some(file!().to_string()),
-                None,
-            )
-        })?)
-    }
+	pub fn parse<T>(&self, k: K) -> Result<Vec<Vec<T>>, Box<ParseFileError>>
+	where
+		T: FromStr,
+	{
+		Ok(self[k].data.parse::<T>().map_err(|(l, _)| {
+			ParseFileError::new(
+				format!(
+					"could not parse {B}{Y}{keyword}{D} as {B}{R}{t}{D}",
+					keyword = self[k].rule.k.keyword,
+					t = std::any::type_name::<T>(),
+				),
+				self.name(),
+				Some(l),
+				self[k].rule.help(),
+				Some(file!().to_string()),
+				None,
+			)
+		})?)
+	}
 }

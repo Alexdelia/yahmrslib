@@ -4,79 +4,79 @@ use std::error::Error;
 
 #[derive(Default)]
 pub struct ParseFileError {
-    pub error: String,
-    pub help: Option<String>,
-    pub file: Option<String>,
-    pub line: Option<Line>,
-    pub source_file: Option<String>,
-    pub source: Option<Box<dyn Error + Send + Sync>>,
+	pub error: String,
+	pub help: Option<String>,
+	pub file: Option<String>,
+	pub line: Option<Line>,
+	pub source_file: Option<String>,
+	pub source: Option<Box<dyn Error + Send + Sync>>,
 }
 
 #[derive(Debug, Clone, Default)]
 pub struct Line {
-    pub line: String,
-    pub index: Option<usize>,
-    pub wrong: Vec<Wrong>,
+	pub line: String,
+	pub index: Option<usize>,
+	pub wrong: Vec<Wrong>,
 }
 
 #[derive(Debug, Clone)]
 pub enum Wrong {
-    Bit((usize, usize)), // if bit from idx 42 to 45, then start = 42, end = 3
-    Str(String),
+	Bit((usize, usize)), // if bit from idx 42 to 45, then start = 42, end = 3
+	Str(String),
 }
 
 impl Error for ParseFileError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        self.source.as_ref().map(|e| &**e as _)
-    }
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
+		self.source.as_ref().map(|e| &**e as _)
+	}
 }
 
 impl From<String> for Wrong {
-    fn from(s: String) -> Self {
-        Self::Str(s)
-    }
+	fn from(s: String) -> Self {
+		Self::Str(s)
+	}
 }
 
 impl From<&str> for Wrong {
-    fn from(s: &str) -> Self {
-        Self::Str(s.to_string())
-    }
+	fn from(s: &str) -> Self {
+		Self::Str(s.to_string())
+	}
 }
 
 impl From<(usize, usize)> for Wrong {
-    fn from((start, end): (usize, usize)) -> Self {
-        Self::Bit((start, end))
-    }
+	fn from((start, end): (usize, usize)) -> Self {
+		Self::Bit((start, end))
+	}
 }
 
 impl ParseFileError {
-    pub fn new(
-        error: impl Into<String>,
-        file: impl Into<Option<String>>,
-        line: Option<Line>,
-        help: impl Into<Option<String>>,
-        source_file: impl Into<Option<String>>,
-        source: Option<Box<dyn Error + Send + Sync>>,
-    ) -> Self {
-        Self {
-            error: error.into(),
-            file: file.into(),
-            line,
-            help: help.into(),
-            source_file: source_file.into(),
-            source,
-        }
-    }
+	pub fn new(
+		error: impl Into<String>,
+		file: impl Into<Option<String>>,
+		line: Option<Line>,
+		help: impl Into<Option<String>>,
+		source_file: impl Into<Option<String>>,
+		source: Option<Box<dyn Error + Send + Sync>>,
+	) -> Self {
+		Self {
+			error: error.into(),
+			file: file.into(),
+			line,
+			help: help.into(),
+			source_file: source_file.into(),
+			source,
+		}
+	}
 }
 
 impl Line {
-    pub fn new(line: impl Into<String>, index: Option<usize>, wrong: Vec<Wrong>) -> Self {
-        Self {
-            line: line.into(),
-            index,
-            wrong,
-        }
-    }
+	pub fn new(line: impl Into<String>, index: Option<usize>, wrong: Vec<Wrong>) -> Self {
+		Self {
+			line: line.into(),
+			index,
+			wrong,
+		}
+	}
 }
 
 /// ParseFileError macro

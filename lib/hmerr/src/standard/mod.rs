@@ -3,18 +3,18 @@ mod display;
 use std::error::Error;
 
 pub struct StandardError {
-    pub error: String,
-    pub expected: String,
-    pub got: String,
-    pub help: Option<String>,
-    pub source_file: Option<String>,
-    pub source: Option<Box<dyn Error + Send + Sync>>,
+	pub error: String,
+	pub expected: String,
+	pub got: String,
+	pub help: Option<String>,
+	pub source_file: Option<String>,
+	pub source: Option<Box<dyn Error + Send + Sync>>,
 }
 
 impl Error for StandardError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        self.source.as_ref().map(|e| &**e as _)
-    }
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
+		self.source.as_ref().map(|e| &**e as _)
+	}
 }
 
 /// StandardError macro

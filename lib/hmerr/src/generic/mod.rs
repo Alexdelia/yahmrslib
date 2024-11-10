@@ -3,16 +3,16 @@ mod display;
 use std::error::Error;
 
 pub struct GenericError {
-    pub error: String,
-    pub help: Option<String>,
-    pub source_file: Option<String>,
-    pub source: Option<Box<dyn Error + Send + Sync>>,
+	pub error: String,
+	pub help: Option<String>,
+	pub source_file: Option<String>,
+	pub source: Option<Box<dyn Error + Send + Sync>>,
 }
 
 impl Error for GenericError {
-    fn source(&self) -> Option<&(dyn Error + 'static)> {
-        self.source.as_ref().map(|e| &**e as _)
-    }
+	fn source(&self) -> Option<&(dyn Error + 'static)> {
+		self.source.as_ref().map(|e| &**e as _)
+	}
 }
 
 /// GenericError macro

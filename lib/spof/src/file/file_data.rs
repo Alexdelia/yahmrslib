@@ -7,69 +7,69 @@ use std::ops::{Index, IndexMut};
 use std::str::FromStr;
 
 pub trait FileDataKey: Into<usize> + FromStr + Clone + Copy {
-    fn build() -> FileData<Self>;
+	fn build() -> FileData<Self>;
 }
 
 pub struct FileData<K: FileDataKey>(Vec<KeyData>, PhantomData<K>);
 
 impl<K: FileDataKey> std::fmt::Debug for FileData<K> {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        let mut s = String::new();
+	fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+		let mut s = String::new();
 
-        for k in self.0.iter() {
-            s.push_str(&format!("     ├{key}\n", key = k.rule.k.keyword));
+		for k in self.0.iter() {
+			s.push_str(&format!("     ├{key}\n", key = k.rule.k.keyword));
 
-            for f in &k.data.0 {
-                s.push_str(&format!(
-                    "{l:>5}│ {token}\n",
-                    l = f.1,
-                    token = f.0.join(" ")
-                ));
-            }
+			for f in &k.data.0 {
+				s.push_str(&format!(
+					"{l:>5}│ {token}\n",
+					l = f.1,
+					token = f.0.join(" ")
+				));
+			}
 
-            s.push_str("     ┆\n");
-        }
+			s.push_str("     ┆\n");
+		}
 
-        write!(f, "{s}")
-    }
+		write!(f, "{s}")
+	}
 }
 
 impl<K: FileDataKey> FileData<K> {
-    pub fn new(data: Vec<KeyData>) -> Self {
-        Self(data, PhantomData)
-    }
+	pub fn new(data: Vec<KeyData>) -> Self {
+		Self(data, PhantomData)
+	}
 
-    pub fn keywords(&self) -> Vec<&Keyword> {
-        self.0.iter().map(|k| &k.rule.k).collect()
-    }
+	pub fn keywords(&self) -> Vec<&Keyword> {
+		self.0.iter().map(|k| &k.rule.k).collect()
+	}
 }
 
 impl<K: FileDataKey> Index<K> for FileData<K> {
-    type Output = KeyData;
+	type Output = KeyData;
 
-    fn index(&self, index: K) -> &Self::Output {
-        &self.0[index.into()]
-    }
+	fn index(&self, index: K) -> &Self::Output {
+		&self.0[index.into()]
+	}
 }
 
 impl<K: FileDataKey> IndexMut<K> for FileData<K> {
-    fn index_mut(&mut self, index: K) -> &mut Self::Output {
-        &mut self.0[index.into()]
-    }
+	fn index_mut(&mut self, index: K) -> &mut Self::Output {
+		&mut self.0[index.into()]
+	}
 }
 
 impl<K: FileDataKey> Index<K> for SpofedFile<K> {
-    type Output = KeyData;
+	type Output = KeyData;
 
-    fn index(&self, index: K) -> &Self::Output {
-        &self.data.0[index.into()]
-    }
+	fn index(&self, index: K) -> &Self::Output {
+		&self.data.0[index.into()]
+	}
 }
 
 impl<K: FileDataKey> IndexMut<K> for SpofedFile<K> {
-    fn index_mut(&mut self, index: K) -> &mut Self::Output {
-        &mut self.data.0[index.into()]
-    }
+	fn index_mut(&mut self, index: K) -> &mut Self::Output {
+		&mut self.data.0[index.into()]
+	}
 }
 
 /// create SpofedFile rule
@@ -160,124 +160,124 @@ macro_rules! rule {
 
 #[cfg(test)]
 mod test {
-    use super::*;
-    use crate::{ExpectedLine, ExpectedSize, Format, FoundLine, Keyword, Occurrence};
-    use std::path::PathBuf;
+	use super::*;
+	use crate::{ExpectedLine, ExpectedSize, Format, FoundLine, Keyword, Occurrence};
+	use std::path::PathBuf;
 
-    #[derive(Clone, Copy)]
-    enum RuleTest {
-        Zero,
-        One,
-    }
+	#[derive(Clone, Copy)]
+	enum RuleTest {
+		Zero,
+		One,
+	}
 
-    impl Into<usize> for RuleTest {
-        fn into(self) -> usize {
-            self as usize
-        }
-    }
+	impl Into<usize> for RuleTest {
+		fn into(self) -> usize {
+			self as usize
+		}
+	}
 
-    impl FromStr for RuleTest {
-        type Err = ();
+	impl FromStr for RuleTest {
+		type Err = ();
 
-        fn from_str(s: &str) -> Result<Self, Self::Err> {
-            match s {
-                "Zero" => Ok(RuleTest::Zero),
-                "One" => Ok(RuleTest::One),
-                _ => Err(()),
-            }
-        }
-    }
+		fn from_str(s: &str) -> Result<Self, Self::Err> {
+			match s {
+				"Zero" => Ok(RuleTest::Zero),
+				"One" => Ok(RuleTest::One),
+				_ => Err(()),
+			}
+		}
+	}
 
-    impl FileDataKey for RuleTest {
-        fn build() -> FileData<Self> {
-            FileData::new(vec![
-                KeyData::new(
-                    FoundLine::new(),
-                    ExpectedLine::new(
-                        Keyword::new("Zero", "the zero"),
-                        Format::new("0", ExpectedSize::Fixed),
-                        Occurrence::Once,
-                    ),
-                ),
-                KeyData::new(
-                    FoundLine::new(),
-                    ExpectedLine::new(
-                        Keyword::new("One", "the one"),
-                        Format::new("1", ExpectedSize::Fixed),
-                        Occurrence::Once,
-                    ),
-                ),
-            ])
-        }
-    }
+	impl FileDataKey for RuleTest {
+		fn build() -> FileData<Self> {
+			FileData::new(vec![
+				KeyData::new(
+					FoundLine::new(),
+					ExpectedLine::new(
+						Keyword::new("Zero", "the zero"),
+						Format::new("0", ExpectedSize::Fixed),
+						Occurrence::Once,
+					),
+				),
+				KeyData::new(
+					FoundLine::new(),
+					ExpectedLine::new(
+						Keyword::new("One", "the one"),
+						Format::new("1", ExpectedSize::Fixed),
+						Occurrence::Once,
+					),
+				),
+			])
+		}
+	}
 
-    #[allow(dead_code)]
-    #[derive(Clone, Copy)]
-    enum RuleTest2 {
-        Zero,
-        One,
-    }
+	#[allow(dead_code)]
+	#[derive(Clone, Copy)]
+	enum RuleTest2 {
+		Zero,
+		One,
+	}
 
-    impl Into<usize> for RuleTest2 {
-        fn into(self) -> usize {
-            self as usize
-        }
-    }
+	impl Into<usize> for RuleTest2 {
+		fn into(self) -> usize {
+			self as usize
+		}
+	}
 
-    impl FromStr for RuleTest2 {
-        type Err = ();
+	impl FromStr for RuleTest2 {
+		type Err = ();
 
-        fn from_str(s: &str) -> Result<Self, Self::Err> {
-            match s {
-                "Zero" => Ok(RuleTest2::Zero),
-                "One" => Ok(RuleTest2::One),
-                _ => Err(()),
-            }
-        }
-    }
+		fn from_str(s: &str) -> Result<Self, Self::Err> {
+			match s {
+				"Zero" => Ok(RuleTest2::Zero),
+				"One" => Ok(RuleTest2::One),
+				_ => Err(()),
+			}
+		}
+	}
 
-    impl FileDataKey for RuleTest2 {
-        fn build() -> FileData<Self> {
-            FileData::new(vec![
-                KeyData::new(
-                    FoundLine::new(),
-                    ExpectedLine::new(
-                        Keyword::new("Zero", "the zero"),
-                        Format::new("0", ExpectedSize::Fixed),
-                        Occurrence::Once,
-                    ),
-                ),
-                KeyData::new(
-                    FoundLine::new(),
-                    ExpectedLine::new(
-                        Keyword::new("One", "the one"),
-                        Format::new("1", ExpectedSize::Fixed),
-                        Occurrence::Once,
-                    ),
-                ),
-            ])
-        }
-    }
+	impl FileDataKey for RuleTest2 {
+		fn build() -> FileData<Self> {
+			FileData::new(vec![
+				KeyData::new(
+					FoundLine::new(),
+					ExpectedLine::new(
+						Keyword::new("Zero", "the zero"),
+						Format::new("0", ExpectedSize::Fixed),
+						Occurrence::Once,
+					),
+				),
+				KeyData::new(
+					FoundLine::new(),
+					ExpectedLine::new(
+						Keyword::new("One", "the one"),
+						Format::new("1", ExpectedSize::Fixed),
+						Occurrence::Once,
+					),
+				),
+			])
+		}
+	}
 
-    #[test]
-    fn test() {
-        let mut f = SpofedFile::<RuleTest> {
-            path: PathBuf::from("test"),
-            data: RuleTest::build(),
-        };
+	#[test]
+	fn test() {
+		let mut f = SpofedFile::<RuleTest> {
+			path: PathBuf::from("test"),
+			data: RuleTest::build(),
+		};
 
-        f[RuleTest::Zero].data = FoundLine::new();
-        f[RuleTest::Zero]
-            .data
-            .push((vec![String::from("keyword"), String::from("format")], 0));
-        f[RuleTest::One].data = FoundLine::new();
-        f[RuleTest::One]
-            .data
-            .push((vec![String::from("other"), String::from("yes")], 0));
-        assert_eq!(f[RuleTest::Zero].data.0[0].0[0], "keyword");
-        assert_eq!(f[RuleTest::One].data.0[0].0[0], "other");
+		f[RuleTest::Zero].data = FoundLine::new();
+		f[RuleTest::Zero]
+			.data
+			.push((vec![String::from("keyword"), String::from("format")], 0));
+		f[RuleTest::One].data = FoundLine::new();
+		f[RuleTest::One]
+			.data
+			.push((vec![String::from("other"), String::from("yes")], 0));
+		assert_eq!(f[RuleTest::Zero].data.0[0].0[0], "keyword");
+		assert_eq!(f[RuleTest::One].data.0[0].0[0], "other");
 
-        // assert_eq!(f[RuleTest2::Zero].data.0.len(), 0);  // compile error
-        // assert_eq!(f[RuleTest2::One].data.0.len(), 0);	// compile error
-    }
+		// assert_eq!(f[RuleTest2::Zero].data.0.len(), 0);  // compile error
+		// assert_eq!(f[RuleTest2::One].data.0.len(), 0);	// compile error
+	}
 }
