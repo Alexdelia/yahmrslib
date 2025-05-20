@@ -156,3 +156,106 @@ pub fn hex_bg(input: TokenStream) -> TokenStream {
 
 	quote!({ ansi::__formatcp!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
 }
+
+struct HSLInput {
+	h: f32,
+	s: f32,
+	l: f32,
+}
+
+impl HSLInput {
+	fn parse(input: syn::parse::ParseStream) -> syn::Result<Self> {
+		fn parse_float(input: syn::parse::ParseStream, comma: bool, max: f32) -> syn::Result<f32> {
+			let Ok(lit) = input.parse::<syn::LitFloat>() else {
+				return Err(syn::Error::new_spanned(
+					input.to_string(),
+					"expected f32 literal",
+				));
+			};
+
+			let expected_msg = || format!("expected f32 literal (0..={max})");
+
+			let Ok(val) = lit.base10_parse::<f32>() else {
+				return Err(syn::Error::new_spanned(lit, expected_msg()));
+			};
+			if val < 0.0 || val > max {
+				return Err(syn::Error::new_spanned(lit, expected_msg()));
+			}
+
+			if comma && input.parse::<syn::Token![,]>().is_err() {
+				return Err(syn::Error::new_spanned(
+					input.to_string(),
+					"expected 3 comma-separated f32",
+				));
+			}
+
+			Ok(val)
+		}
+
+		let h = parse_float(input, true, 360.0)?;
+		let s = parse_float(input, true, 100.0)?;
+		let l = parse_float(input, false, 100.0)?;
+		Ok(HSLInput { h, s, l })
+	}
+}
+
+fn hsl_to_rgb(h: f32, s: f32, l: f32) -> (u8, u8, u8) {
+	let q = if l < 0.5 {
+		l * (1.0 + s)
+	} else {
+		l + s - l * s
+	};
+	let p = 2.0 * l - q;
+
+	let r = hue_to_rgb(p, q, h + 1.0 / 3.0);
+	let g = hue_to_rgb(p, q, h);
+	let b = hue_to_rgb(p, q, h - 1.0 / 3.0);
+
+	(
+		(r * 255.0).round() as u8,
+		(g * 255.0).round() as u8,
+		(b * 255.0).round() as u8,
+	)
+}
+
+fn hue_to_rgb(p: f32, q: f32, t: f32) -> f32 {
+	let t = if t < 0.0 {
+		t + 1.0
+	} else if t > 1.0 {
+		t - 1.0
+	} else {
+		t
+	};
+
+	if t < 1.0 / 6.0 {
+		p + (q - p) * 6.0 * t
+	} else if t < 1.0 / 2.0 {
+		q
+	} else if t < 2.0 / 3.0 {
+		p + (q - p) * (2.0 / 3.0 - t) * 6.0
+	} else {
+		p
+	}
+}
+
+#[proc_macro]
+pub fn hsl(input: TokenStream) -> TokenStream {
+	let HSLInput { h, s, l } = match HSLInput::parse.parse(input) {
+		Ok(hsl) => hsl,
+		Err(e) => return e.to_compile_error().into(),
+	};
+	let (r, g, b) = hsl_to_rgb(h / 360.0, s / 100.0, l / 100.0);
+
+	quote!({ ansi::__formatcp!("\x1b[38;2;{};{};{}m", #r, #g, #b) }).into()
+}
+
+#[proc_macro]
+pub fn hsl_bg(input: TokenStream) -> TokenStream {
+	let HSLInput { h, s, l } = match HSLInput::parse.parse(input) {
+		Ok(hsl) => hsl,
+		Err(e) => return e.to_compile_error().into(),
+	};
+	let (r, g, b) = hsl_to_rgb(h / 360.0, s / 100.0, l / 100.0);
+
+	quote!({ ansi::__formatcp!("\x1b[48;2;{};{};{}m", #r, #g, #b) }).into()
+}
