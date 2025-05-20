@@ -1,6 +1,6 @@
 [package]
 name = "ivec"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 authors = ["Alexdelia"]
 description = "A hand made self iterable vector, wrapping std::vec::Vec"

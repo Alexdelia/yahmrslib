@@ -1,2 +1,3 @@
 [workspace]
+resolver = "3"
 members = ["lib/ansi", "lib/ivec", "lib/hmerr", "lib/ux", "lib/spof"]
