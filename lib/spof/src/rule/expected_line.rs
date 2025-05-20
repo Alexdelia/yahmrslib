@@ -1,7 +1,7 @@
 use crate::{Format, Keyword, Occurrence};
 
 use ansi::abbrev::{B, D, G, M, R, Y};
-use hmerr::{pfe, ple, pwe, Result};
+use hmerr::{Result, pfe, ple, pwe};
 
 #[derive(Debug)]
 pub struct ExpectedLine {
@@ -82,8 +82,9 @@ mod test {
 			.map(|s| s.to_string())
 			.collect();
 		let _keyword = split.remove(0);
-		assert!(el
-			.check("file_name", content[1].clone(), &split, 1)
-			.is_err());
+		assert!(
+			el.check("file_name", content[1].clone(), &split, 1)
+				.is_err()
+		);
 	}
 }

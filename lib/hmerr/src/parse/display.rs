@@ -1,7 +1,7 @@
 use super::{Line, ParseFileError, Wrong};
 
 use crate::display::{
-	write, LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN, SPACE, TAB,
+	LINT_COLOR, LINT_SIGN, SIDE, SIDE_PADDING_SIGN, SIDE_SIGN, SOURCE_SIDE_SIGN, SPACE, TAB, write,
 };
 
 use std::fmt::{Debug, Display};

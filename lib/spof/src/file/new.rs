@@ -2,7 +2,7 @@ use super::{FileData, FileDataKey, SpofedFile};
 use crate::ParsedLine;
 
 use ansi::abbrev::{B, D, G, Y};
-use hmerr::{pfe, ple, pwe, Result};
+use hmerr::{Result, pfe, ple, pwe};
 
 use std::fs::File;
 use std::io::{BufRead, BufReader};

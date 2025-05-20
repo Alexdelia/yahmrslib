@@ -96,8 +96,8 @@ impl HexInput {
 
 		if s.len() != 6 || !s.chars().all(|c| c.is_ascii_hexdigit()) {
 			let mut e = format!(
-            	"expected hex color (e.g. \x1b[32m#ff00ff\x1b[39m), got \x1b[31m{input}\x1b[39m -> \x1b[31;3m{s}\x1b[39;23m"
-        	);
+				"expected hex color (e.g. \x1b[32m#ff00ff\x1b[39m), got \x1b[31m{input}\x1b[39m -> \x1b[31;3m{s}\x1b[39;23m"
+			);
 			if s.len() != 6 {
 				e.push_str(
 					format!(

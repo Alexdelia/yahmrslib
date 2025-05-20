@@ -1,6 +1,6 @@
 use super::StandardError;
 
-use crate::display::{write, EMPTY_STR, EXPECTED, GOT};
+use crate::display::{EMPTY_STR, EXPECTED, GOT, write};
 
 use std::fmt::{Debug, Display};
 
