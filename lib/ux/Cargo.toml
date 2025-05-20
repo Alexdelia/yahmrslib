@@ -8,4 +8,4 @@ description = "simple library to handle user xperience"
 [dependencies]
 ansi-regex = "0.1.0"
 getch = "0.3.1"
-termsize = "0.1.6"
+termsize = "0.1.9"

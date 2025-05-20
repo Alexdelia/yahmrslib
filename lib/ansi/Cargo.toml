@@ -15,5 +15,5 @@ forty_two = []
 
 [dependencies]
 gen = { path = "src/gen", optional = true }
-const_format = { version = "0.2.30", optional = true }
+const_format = { version = "0.2.34", optional = true }
 ansi-regex = { version = "0.1.0", optional = true }
