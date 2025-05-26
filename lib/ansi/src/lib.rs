@@ -2,7 +2,7 @@
 pub use const_format::formatcp as __formatcp;
 
 #[cfg(feature = "gen")]
-pub use r#gen::{c8bit, c8bit_bg, hex, hex_bg, rgb, rgb_bg};
+pub use r#gen::{c8bit, c8bit_bg, hex, hex_bg, hsl, hsl_bg, rgb, rgb_bg};
 
 #[cfg(feature = "remove")]
 mod remove;
